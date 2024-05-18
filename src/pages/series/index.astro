@@ -1,0 +1,19 @@
+---
+import { getCollection } from "astro:content";
+import SeriesLayout from "../../layouts/SeriesLayout.astro";
+const allPosts = await getCollection("posts");
+const series: { series: string }[] = allPosts.reduce(
+    (acc: { series: string }[], post) => {
+        if (post.data && post.data.series) {
+            if (!acc.find((s) => s.series === post.data.series))
+                acc.push({ series: post.data.series });
+        }
+        return acc;
+    },
+    [],
+);
+console.log(series);
+const title = "Series Index";
+---
+
+<SeriesLayout title={title} series={series} />

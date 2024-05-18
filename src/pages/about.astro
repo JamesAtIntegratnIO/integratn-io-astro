@@ -1,0 +1,17 @@
+---
+import Layout from "../layouts/About.astro";
+import { author } from "../consts.ts";
+---
+
+<Layout
+	title="About Me"
+	description="Where to Learn about the Blog Owner"
+	pubDate={new Date("May 16, 2024")}
+	heroImage="/me2.png"
+>
+	<p>
+		My name is {author.name}. I love Go , Python, Docker, Kubernetes, Enabling
+		Devs, coffee , long walks through the yaml, and I think Jenkins is a bad
+		word.
+	</p>
+</Layout>

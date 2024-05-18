@@ -1,0 +1,39 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE } from "../consts";
+const { title, description, image } = Astro.props;
+const pageTitle = title ? `${SITE_TITLE} - ${title}` : SITE_TITLE;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={pageTitle} description={description} , image={image} />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      h2 {
+        margin-top: 0;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <h2>{title}</h2>
+    <slot />
+    <Footer />
+    <script>
+      import "../scripts/menu.js"
+    </script>
+  </body>
+</html>

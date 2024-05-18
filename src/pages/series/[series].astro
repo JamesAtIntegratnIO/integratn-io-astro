@@ -1,0 +1,32 @@
+---
+import { getCollection } from "astro:content";
+import BlogPostsLayout from "../../layouts/BlogPostsLayout.astro";
+export const allPosts = await getCollection("posts");
+export async function getStaticPaths() {
+  const series = allPosts.reduce((allTags: string[], post) => {
+    if (post.data.series) {
+      // Check if series is not undefined
+      return (allTags as string[]).concat(post.data.series || []);
+    } else {
+      return allTags;
+    }
+  }, []);
+
+  const uniqueTags = [...new Set(series)];
+
+  return uniqueTags.map((tag) => ({
+    params: { series: tag },
+    props: {
+      posts: allPosts.filter((post) => post.data.series?.includes(tag)),
+    },
+  }));
+}
+
+const { series } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<BlogPostsLayout
+  title={`${(series as string).replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())} Series`}
+  posts={posts}
+/>

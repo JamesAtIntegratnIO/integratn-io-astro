@@ -1,0 +1,88 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "./BaseLayout.astro";
+import {
+    PINK,
+    MAUVE,
+    RED,
+    MAROON,
+    PEACH,
+    YELLOW,
+    GREEN,
+    TEAL,
+    SKY,
+    SAPPHIRE,
+    BLUE,
+    LAVENDER,
+} from "../consts.ts";
+const allPosts = await getCollection("posts");
+const title = "Tags Index";
+const { tags } = Astro.props;
+
+// Randomize the order of tags
+tags.sort(() => Math.random() - 0.5);
+---
+
+<BaseLayout title={title}>
+    <div class="tags">
+        {
+            tags.map((tag: any) => (
+                <span
+                    class="tag"
+                    style={{
+                        fontSize: `${tag.count > 1 ? tag.count * 2.5 + 16 : 16}px`,
+                        backgroundColor: [
+                            PINK,
+                            MAUVE,
+                            RED,
+                            MAROON,
+                            PEACH,
+                            YELLOW,
+                            GREEN,
+                            TEAL,
+                            SKY,
+                            SAPPHIRE,
+                            BLUE,
+                            LAVENDER,
+                        ][Math.floor(Math.random() * 12)],
+                    }}
+                >
+                    <a href={`/tags/${tag.tag}`}>
+                        {tag.tag
+                            .split(" ")
+                            .map(
+                                (word: string) =>
+                                    word.charAt(0).toUpperCase() +
+                                    word.slice(1),
+                            )
+                            .join(" ")}
+                    </a>
+                </span>
+            ))
+        }
+    </div>
+</BaseLayout>
+
+<style>
+    a {
+        color: var(--gray);
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Added height to make it vertically centered */
+    }
+
+    .tag {
+        margin: 0.25em;
+        /* border: 1px var(--gray-dark) solid; */
+        box-shadow: var(--box-shadow); /* Added box-shadow */
+        border-radius: 8px; /* Rounded the corners */
+        padding: 0.25em 0.5em; /* Adjusted padding */
+        font-size: 1em; /* Adjusted font size */
+        background-color: var(--accent);
+    }
+</style>

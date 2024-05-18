@@ -1,0 +1,52 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "./BaseLayout.astro";
+
+const allPosts = await getCollection("posts");
+const { series, title } = Astro.props;
+---
+
+<BaseLayout title={title}>
+    <div class="serieses">
+        {
+            series.map((series: any) => (
+                <span class="series">
+                    <a href={`/series/${series.series}`}>
+                        {series.series
+                            .split(/[-_]/)
+                            .map(
+                                (word: string) =>
+                                    word.charAt(0).toUpperCase() +
+                                    word.slice(1),
+                            )
+                            .join(" ")}
+                    </a>
+                </span>
+            ))
+        }
+    </div>
+</BaseLayout>
+
+<style>
+    a {
+        color: var(--gray);
+    }
+
+    .serieses {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Added height to make it vertically centered */
+    }
+
+    .series {
+        margin: 0.25em;
+        /* border: 1px var(--gray-dark) solid; */
+        box-shadow: var(--box-shadow); /* Added box-shadow */
+        border-radius: 8px; /* Rounded the corners */
+        padding: 0.25em 0.5em; /* Adjusted padding */
+        font-size: 1em; /* Adjusted font size */
+        background-color: var(--accent);
+    }
+</style>

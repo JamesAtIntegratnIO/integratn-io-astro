@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content";
+import BlogPostsLayout from "../../layouts/BlogPostsLayout.astro";
+export const allPosts = await getCollection("posts");
+export async function getStaticPaths() {
+  const categories = allPosts.reduce((allTags: string[], post) => {
+    if (post.data.categories) {
+      // Check if categories is not undefined
+      return (allTags as string[]).concat(post.data.categories || []);
+    } else {
+      return allTags;
+    }
+  }, []);
+
+  const uniqueTags = [...new Set(categories)];
+
+  return uniqueTags.map((category) => ({
+    params: { category },
+    props: {
+      posts: allPosts.filter((post) => post.data.categories?.includes(category)),
+    },
+  }));
+}
+
+const { category } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<BlogPostsLayout title={`Posts in the ${(category as string).replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())} Category`} posts={posts} />

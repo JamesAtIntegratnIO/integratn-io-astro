@@ -1,0 +1,10 @@
+---
+import { getCollection } from "astro:content";
+import BlogPostsLayout from "../../layouts/BlogPostsLayout.astro";
+
+const posts = (await getCollection("posts")).sort(
+	(a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf(),
+);
+---
+
+<BlogPostsLayout posts={posts} />

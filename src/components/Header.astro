@@ -53,6 +53,7 @@ import { SITE_TITLE, author } from "../consts";
 		box-shadow: 0 2px 8px rgba(var(--black), 5%);
 		height: 56px;
 		position: sticky;
+		z-index: 1000;
 	}
 
 	h2 {
@@ -72,11 +73,7 @@ import { SITE_TITLE, author } from "../consts";
 		justify-content: space-between;
 		height: 56px;
 	}
-	.internal-links {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-	}
+
 	nav a {
 		padding: 0.5em 0.5em;
 		color: var(--accent-dark);

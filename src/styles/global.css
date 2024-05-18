@@ -221,7 +221,7 @@ hr {
 .internal-links {
 	position: relative; /* Add this line */
 	display: flex;
-	align-items: center;
+	align-items: center;;
 }
 .hamburger {
   right: 20px;
@@ -247,7 +247,6 @@ hr {
   margin: 0;
 	position: absolute;
 	right: 0;
-	z-index: 1;
 	background: var(--gray);
 	border-radius: 8px;
 	box-shadow: var(--box-shadow);
@@ -273,9 +272,12 @@ hr {
 	color: var(--accent-dark)
 }
 
-.expanded {
+.nav-links.expanded {
   display: unset;
+	position: absolute;
+  z-index: 10000; /* Add this line */
 }
+
 @media screen and (min-width: 721px) {
 	.nav-links {
 			display: flex;
@@ -292,9 +294,14 @@ hr {
 	.hamburger {
 			display: none;
 	}
-	.internal-link {
-		display: flex;
-		justify-content: flex-end;
+	.internal-links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 	}
-	
+	.nav-links.expanded {
+		display: flex;
+		position: static;
+		background: none;
+}
 }

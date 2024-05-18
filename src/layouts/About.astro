@@ -4,11 +4,36 @@ import BaseLayout from "./BaseLayout.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 
 type Props = CollectionEntry<"posts">["data"];
-const title = "All about me";
+const title = "All About Me";
 const description = "This is the about me. There should be more here";
 const { pubDate, updatedDate, heroImage } = Astro.props;
 ---
 
+
+<BaseLayout description={description}>
+  <main>
+    <div class="hero-image">
+      {heroImage && <img width={150} height={150} src={heroImage} alt="" />}
+    </div>
+    <div class="prose">
+      <div class="title">
+        <div class="date">
+          <FormattedDate date={pubDate} />
+          {
+            updatedDate && (
+              <div class="last-updated-on">
+                Last updated on <FormattedDate date={updatedDate} />
+              </div>
+            )
+          }
+        </div>
+        <h1>{title}</h1>
+        <hr />
+      </div>
+      <slot />
+    </div>
+  </main>
+</BaseLayout>
 <style>
   main {
     width: calc(100% - 2em);
@@ -48,27 +73,3 @@ const { pubDate, updatedDate, heroImage } = Astro.props;
     font-style: italic;
   }
 </style>
-<BaseLayout title={title} description={description}>
-  <main>
-    <div class="hero-image">
-      {heroImage && <img width={150} height={150} src={heroImage} alt="" />}
-    </div>
-    <div class="prose">
-      <div class="title">
-        <div class="date">
-          <FormattedDate date={pubDate} />
-          {
-            updatedDate && (
-              <div class="last-updated-on">
-                Last updated on <FormattedDate date={updatedDate} />
-              </div>
-            )
-          }
-        </div>
-        <h1>{title}</h1>
-        <hr />
-      </div>
-      <slot />
-    </div>
-  </main>
-</BaseLayout>

@@ -1,6 +1,5 @@
 ---
 import { getCollection } from "astro:content";
-import TagsLayout from "../../layouts/TagsLayout.astro";
 import CategoriesLayout from "../../layouts/CategoriesLayout.astro";
 const allPosts = await getCollection("posts");
 const categories: { category: string; count: number }[] = allPosts.reduce(

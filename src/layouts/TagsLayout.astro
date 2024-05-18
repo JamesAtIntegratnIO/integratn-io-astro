@@ -1,5 +1,4 @@
 ---
-import { getCollection } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
 import {
   PINK,
@@ -15,7 +14,6 @@ import {
   BLUE,
   LAVENDER,
 } from "../consts.ts";
-const allPosts = await getCollection("posts");
 const title = "Tags Index";
 const { tags } = Astro.props;
 console.log(tags);

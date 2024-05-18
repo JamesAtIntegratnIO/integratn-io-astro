@@ -218,11 +218,17 @@ hr {
 	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
 }
-
+.internal-links {
+	position: relative; /* Add this line */
+	display: flex;
+	align-items: center;
+}
 .hamburger {
-  padding-right: 20px;
-  cursor: pointer;
+  right: 20px;
+	position: absolute;
+	cursor: pointer;
 	margin-top: 5px;
+
 }
 
 .hamburger .line {
@@ -234,17 +240,28 @@ hr {
 }
 
 .nav-links {
-  width: 100%;
-  top: 5rem;
+  
+  top: 2rem;
   /* left: 48px; */
   display: none;
   margin: 0;
+	position: absolute;
+	right: 0;
+	z-index: 1;
+	background: var(--gray);
+	border-radius: 8px;
+	box-shadow: var(--box-shadow);
+	padding: 0;
+	max-width: 300px;
+	transition: all 0.3s ease-in-out;
 }
 
 .nav-links a {
   display: block;
-  text-align: center;
-  padding: 10px 0;
+  text-align: right;
+	margin-right: 5px;
+	margin-left: 5px;
+  padding: 5px 0;
   text-decoration: none;
   font-size: 1.2rem;
   font-weight: bold;
@@ -262,7 +279,7 @@ hr {
 @media screen and (min-width: 721px) {
 	.nav-links {
 			display: flex;
-			justify-content: flex-end;
+			justify-content: center;
 			position: static;
 			background: none;
 	}

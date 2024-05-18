@@ -47,7 +47,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
     font-style: italic;
   }
 </style>
-<BaseLayout title={title} , description={description}>
+<BaseLayout description={description}>
   <article>
     <div class="hero-image">
       {heroImage && <img width={150} height={150} src={heroImage} alt="" />}

@@ -23,7 +23,7 @@ const { categories } = Astro.props;
 categories.sort(() => Math.random() - 0.5);
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={title} description="List of all the Categories">
   <div class="categories">
     {
       categories.map((category: any) => (

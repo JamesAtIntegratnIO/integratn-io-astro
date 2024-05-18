@@ -41,7 +41,7 @@ for (let i = 0; i < middleTags.length; i += chunkSize) {
 chunks.push(tags.slice(tags.length - 3, tags.length));
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={title} description="List of all my Tags">
   <div class="tags">
     {
       chunks.map((chunk) => (

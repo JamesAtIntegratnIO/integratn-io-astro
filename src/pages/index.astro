@@ -1,6 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import LatestBlogLayout from "../layouts/LatestBlogLayout.astro";
+import LatestBlog from "../components/LatestBlog.astro";
+
+const title = "Integratn.io - Home";
+const description = "Welcome to Integratn.io! Here you will find tutorials and ideas about the topics I'm constantly exploring. Whether you're a beginner or an experienced developer, there's something here for everyone. From web development, homelab to DevOps, I cover a wide range of topics to help you expand your knowledge and skills.";
 ---
 
 <style>
@@ -13,7 +16,7 @@ import LatestBlogLayout from "../layouts/LatestBlogLayout.astro";
 		padding: 3em 1em;
 	}
 </style>
-<BaseLayout>
+<BaseLayout title={title} description={description} >
 	<article>
 		<div class="prose">
 			<h1>Welcome to Integratn.io!</h1>
@@ -36,7 +39,7 @@ import LatestBlogLayout from "../layouts/LatestBlogLayout.astro";
 				world of technology and programming!
 			</p>
 			<h2>Latest Article</h2>
-			<LatestBlogLayout />
+			<LatestBlog />
 		</div>
 	</article>
 </BaseLayout>

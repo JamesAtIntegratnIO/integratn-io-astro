@@ -6,7 +6,7 @@ const allPosts = await getCollection("posts");
 const { series, title } = Astro.props;
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={title} description="List of all the Series">
   <div class="serieses">
     {
       series.map((series: any) => (

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://frontmatter.codes/frontmatter.schema.json",
+  "frontMatter.framework.id": "astro",
+  "frontMatter.framework.startCommand": "nix develop && yarn run dev",
+  "frontMatter.preview.host": "http://localhost:4321",
+  "frontMatter.content.publicFolder": "public",
+  "frontMatter.content.pageFolders": [
+    {
+      "path": "[[workspace]]/src/content/posts",
+      "title": "posts",
+      "excludeSubdir": false
+    }
+  ],
+  "frontMatter.taxonomy.contentTypes": [
+    {
+      "name": "default",
+      "pageBundle": false,
+      "previewPath": "'posts'",
+      "filePrefix": null,
+      "clearEmpty": true,
+      "fields": [
+        {
+          "title": "Title",
+          "name": "title",
+          "type": "string",
+          "single": true
+        },
+        {
+          "title": "Description",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "title": "Publishing date",
+          "name": "pubDate",
+          "type": "datetime",
+          "default": "{{now}}",
+          "isPublishDate": true
+        },
+        {
+          "title": "Content preview",
+          "name": "heroImage",
+          "type": "image",
+          "isPreviewImage": true
+        },
+        {
+          "title": "Tags",
+          "name": "tags",
+          "type": "tags",
+          "single": false
+        },
+        {
+          "title": "Series",
+          "name": "series",
+          "type": "string",
+          "single": true
+        },
+        {
+          "title": "Categories",
+          "name": "categories",
+          "type": "categories",
+          "single": false
+        },
+        {
+          "title": "Updated Date",
+          "name": "updatedDate",
+          "type": "datetime",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

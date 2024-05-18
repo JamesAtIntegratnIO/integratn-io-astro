@@ -1,13 +1,12 @@
 ---
 import { getCollection } from "astro:content";
-import FormattedDate from "../components/FormattedDate.astro";
-import BaseLayout from "../layouts/BaseLayout.astro";
+import FormattedDate from "./FormattedDate.astro";
 
-const { title } = Astro.props;
 // Sort posts by date and select the latest one
 const postsData = await getCollection("posts");
 const posts = Array.isArray(postsData) ? postsData : [];
 const latestPost: any = posts.sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())[0];
+
 ---
   <main>
     <section>

@@ -4,8 +4,9 @@ import BaseLayout from "./BaseLayout.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 
 type Props = CollectionEntry<"posts">["data"];
-
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const title = "All about me";
+const description = "This is the about me. There should be more here";
+const { pubDate, updatedDate, heroImage } = Astro.props;
 ---
 
 <style>
@@ -47,7 +48,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
     font-style: italic;
   }
 </style>
-<BaseLayout description={description}>
+<BaseLayout title={title} description={description}>
   <main>
     <div class="hero-image">
       {heroImage && <img width={150} height={150} src={heroImage} alt="" />}

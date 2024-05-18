@@ -20,6 +20,12 @@
       "clearEmpty": true,
       "fields": [
         {
+          "title": "Draft",
+          "name": "draft",
+          "type": "boolean",
+          "default": true
+        },
+        {
           "title": "Title",
           "name": "title",
           "type": "string",

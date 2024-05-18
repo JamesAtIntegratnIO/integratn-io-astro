@@ -13,6 +13,7 @@ const postCollection = defineCollection({
 		heroImage: z.string(),
 		series: z.string().optional(),
 		categories: z.array(z.string()).optional(),
+		draft: z.boolean().optional(),
 	}),
 });
 

@@ -48,7 +48,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
   }
 </style>
 <BaseLayout description={description}>
-  <article>
+  <main>
     <div class="hero-image">
       {heroImage && <img width={150} height={150} src={heroImage} alt="" />}
     </div>
@@ -69,5 +69,5 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
       </div>
       <slot />
     </div>
-  </article>
+  </main>
 </BaseLayout>

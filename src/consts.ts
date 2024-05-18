@@ -4,12 +4,12 @@
 export const SITE_TITLE = 'INTEGRATN.IO';
 export const SITE_DESCRIPTION = 'Welcome to my blog!';
 export const author = {
-    name: 'James',
-    socials:
-    {
-        mastadon: '@integratnio',
-        github: 'jamesAtIntegratnio',
-    }
+  name: 'James',
+  socials:
+  {
+    mastadon: '@integratnio',
+    github: 'jamesAtIntegratnio',
+  }
 };
 
 export const PINK = "#f5bde6"; // Pink

@@ -17,7 +17,9 @@ export async function getStaticPaths() {
   return uniqueTags.map((category) => ({
     params: { category },
     props: {
-      posts: allPosts.filter((post) => post.data.categories?.includes(category)),
+      posts: allPosts.filter((post) =>
+        post.data.categories?.includes(category),
+      ),
     },
   }));
 }
@@ -26,4 +28,7 @@ const { category } = Astro.params;
 const { posts } = Astro.props;
 ---
 
-<BlogPostsLayout title={`Posts in the ${(category as string).replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())} Category`} posts={posts} />
+<BlogPostsLayout
+  title={`Posts in the ${(category as string).replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())} Category`}
+  posts={posts}
+/>

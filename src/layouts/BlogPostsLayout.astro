@@ -10,80 +10,88 @@ const { posts, title } = Astro.props;
     <section>
       <ul>
         {
-          posts.map((post: any) => (
-            <li>
-              <a href={`/posts/${post.slug}/`}>
-                <div  class="post" style={{ position: "relative" }}>
-                  <img
-                    class="post-image"
-                    width={720}
-                    height={360}
-                    src={post.data.heroImage}
-                    alt=""
-                  />
-                  <div class="post-description">{post.data.description}</div>
-                </div>
-                <h4 class="title">{post.data.title}</h4>
-                <p class="date">
-                  <FormattedDate date={post.data.pubDate} />
-                </p>
-                {post.data.tags && (
-                  <div class="container">
-                    {" "}
-                    Tags:
-                    {Array.isArray(post.data.tags) &&
-                      post.data.tags.map((tag: string) => (
-                        <a href={`/tags/${tag}`}>
-                          <span class="tag">
-                            {tag
-                              .split(/[-_]/)
-                              .map(
-                                (word: string) =>
-                                  word.charAt(0).toUpperCase() + word.slice(1),
-                              )
-                              .join(" ")}{" "}
-                          </span>
-                        </a>
-                      ))}
+          posts
+            .sort(
+              (a: any, b: any) =>
+                new Date(b.data.pubDate).getTime() -
+                new Date(a.data.pubDate).getTime(),
+            )
+            .map((post: any) => (
+              <li>
+                <a href={`/posts/${post.slug}/`}>
+                  <div class="post" style={{ position: "relative" }}>
+                    <img
+                      class="post-image"
+                      width={720}
+                      height={360}
+                      src={post.data.heroImage}
+                      alt=""
+                    />
+                    <div class="post-description">{post.data.description}</div>
                   </div>
-                )}
-                {post.data.categories && (
-                  <div class="container">
-                    {" "}
-                    Categories:
-                    {Array.isArray(post.data.categories) &&
-                      post.data.categories.map((category: string) => (
-                        <a href={`/categories/${category}`}>
-                          <span class="category">
-                            {category
-                              .split(/[-_]/)
-                              .map(
-                                (word: string) =>
-                                  word.charAt(0).toUpperCase() + word.slice(1),
-                              )
-                              .join(" ")}{" "}
-                          </span>
-                        </a>
-                      ))}
-                  </div>
-                )}
-                {post.data.series && (
-                  <div class="container">
-                    Series:
-                    <a href={`/series/${post.data.series}`} class="series">
-                      {post.data.series
-                        .split(/[-_]/)
-                        .map(
-                          (word: string) =>
-                            word.charAt(0).toUpperCase() + word.slice(1),
-                        )
-                        .join(" ")}{" "}
-                    </a>
-                  </div>
-                )}
-              </a>
-            </li>
-          ))
+                  <h4 class="title">{post.data.title}</h4>
+                  <p class="date">
+                    <FormattedDate date={post.data.pubDate} />
+                  </p>
+                  {post.data.tags && (
+                    <div class="container">
+                      {" "}
+                      Tags:
+                      {Array.isArray(post.data.tags) &&
+                        post.data.tags.map((tag: string) => (
+                          <a href={`/tags/${tag}`}>
+                            <span class="tag">
+                              {tag
+                                .split(/[-_]/)
+                                .map(
+                                  (word: string) =>
+                                    word.charAt(0).toUpperCase() +
+                                    word.slice(1),
+                                )
+                                .join(" ")}{" "}
+                            </span>
+                          </a>
+                        ))}
+                    </div>
+                  )}
+                  {post.data.categories && (
+                    <div class="container">
+                      {" "}
+                      Categories:
+                      {Array.isArray(post.data.categories) &&
+                        post.data.categories.map((category: string) => (
+                          <a href={`/categories/${category}`}>
+                            <span class="category">
+                              {category
+                                .split(/[-_]/)
+                                .map(
+                                  (word: string) =>
+                                    word.charAt(0).toUpperCase() +
+                                    word.slice(1),
+                                )
+                                .join(" ")}{" "}
+                            </span>
+                          </a>
+                        ))}
+                    </div>
+                  )}
+                  {post.data.series && (
+                    <div class="container">
+                      Series:
+                      <a href={`/series/${post.data.series}`} class="series">
+                        {post.data.series
+                          .split(/[-_]/)
+                          .map(
+                            (word: string) =>
+                              word.charAt(0).toUpperCase() + word.slice(1),
+                          )
+                          .join(" ")}{" "}
+                      </a>
+                    </div>
+                  )}
+                </a>
+              </li>
+            ))
         }
       </ul>
     </section>
@@ -163,7 +171,7 @@ const { posts, title } = Astro.props;
     gap: 5px;
   }
   .series {
-    margin: 0.25em;
+    margin: 0.05em;
     color: var(--black);
     /* border: 1px var(--gray-dark) solid; */
     box-shadow: var(--box-shadow); /* Added box-shadow */
@@ -173,7 +181,7 @@ const { posts, title } = Astro.props;
     background-color: var(--rosewater);
   }
   .tag {
-    margin: 0.25em;
+    margin: 0.05em;
     color: var(--black);
     /* border: 1px var(--gray-dark) solid; */
     box-shadow: var(--box-shadow); /* Added box-shadow */
@@ -183,7 +191,7 @@ const { posts, title } = Astro.props;
     background-color: var(--accent);
   }
   .category {
-    margin: 0.25em;
+    margin: 0.05em;
     color: var(--black);
     /* border: 1px var(--gray-dark) solid; */
     box-shadow: var(--box-shadow); /* Added box-shadow */
@@ -195,20 +203,20 @@ const { posts, title } = Astro.props;
   .post {
     position: relative;
     display: inline-block;
-}
+  }
 
-.post-image {
+  .post-image {
     display: block;
     width: 100%;
     height: auto;
     transition: filter 0.3s ease;
-}
+  }
 
-.post:hover .post-image {
+  .post:hover .post-image {
     filter: blur(2px);
-}
+  }
 
-.post-description {
+  .post-description {
     position: absolute;
     top: 0;
     left: 0;
@@ -223,9 +231,9 @@ const { posts, title } = Astro.props;
     color: white;
     padding: 20px;
     box-sizing: border-box;
-}
+  }
 
-.post:hover .post-description {
+  .post:hover .post-description {
     opacity: 1;
-}
+  }
 </style>

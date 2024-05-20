@@ -1,6 +1,6 @@
 ---
 title: "Docker Training 2 - My First Docker Build"
-pubDate: July 20, 2021 
+pubDate: July 20, 2021
 tags: ["docker-series"]
 categories: [tutorial, docker]
 series: docker-training
@@ -15,7 +15,7 @@ To get started we need to create a project to store our app we are going to work
 DockerTraining/
     go-rest-api/
         main.go
-    dockerfile      
+    dockerfile
 ```
 Initialize the folder as a go project
 ```shell
@@ -92,11 +92,11 @@ Lets look at the output.
 Sending build context to Docker daemon  84.48kB
 Step 1/7 : FROM golang:alpine
 alpine: Pulling from library/golang
-596ba82af5aa: Pull complete 
-344f2904b0c6: Pull complete 
-d3bda26d9fa1: Pull complete 
-24e1a14bb4a2: Pull complete 
-f0b175b107d5: Pull complete 
+596ba82af5aa: Pull complete
+344f2904b0c6: Pull complete
+d3bda26d9fa1: Pull complete
+24e1a14bb4a2: Pull complete
+f0b175b107d5: Pull complete
 Digest: sha256:07ec52ea1063aa6ca02034af5805aaae77d3d4144cced4e95f09d62a6d8ddf0a
 Status: Downloaded newer image for golang:alpine
  ---> 6af5835b113c
@@ -155,7 +155,7 @@ Step 5/7: __RUN__ uses the go executable to fetches dependencies for our app. So
 
 Step 6/7 __RUN__ uses the go executable again to build the app.
 
-Step 7/7 __ENTRYPOINT__ declares the what to start with the container. 
+Step 7/7 __ENTRYPOINT__ declares the what to start with the container.
 
 The image is built. But where did it go? Lets use `docker image ls` to find it
 ```shell
@@ -167,7 +167,7 @@ Heres how this output breaks down:
 
 REPOSITORY: The name we gave our image.
 
-TAG: `latest` is always the most recently built version of the image. 
+TAG: `latest` is always the most recently built version of the image.
 
 IMAGE ID: This is a unique hash that identifies our image
 
@@ -212,13 +212,13 @@ Lets look at our images again.
 
 ```shell
 
-/Volumes/CaseSensitive/docker-training (main ✘)✹ ᐅ docker image ls                              
+/Volumes/CaseSensitive/docker-training (main ✘)✹ ᐅ docker image ls
 REPOSITORY            TAG        IMAGE ID            CREATED             SIZE
 helloFromIntegratnIO  dev        dee090a053a3        About an hour ago   321MB
 helloFromIntegratnIO  latest     dee090a053a3        About an hour ago   321MB
 <none>                <none>     86fd2d2eb271        About an hour ago   321MB
 ```
 
-So, we have the `dev` tag we just created. But lets look at the `IMAGE ID`. The `dev` tag and the `latest` tag have the same `IMAGE ID`. This is what we want because it is the most recently created image. 
+So, we have the `dev` tag we just created. But lets look at the `IMAGE ID`. The `dev` tag and the `latest` tag have the same `IMAGE ID`. This is what we want because it is the most recently created image.
 
-So what is this `<none>` image? If you scroll up. You will see that the `<none> IMAGE ID` matches the `IMAGE ID` from our first build. This shows you what happens when you don't properly tag your images. If you built another image using the `dev` tag. The same thing would happen to that image. But this is local testing and not a production release. So no big deal. 
+So what is this `<none>` image? If you scroll up. You will see that the `<none> IMAGE ID` matches the `IMAGE ID` from our first build. This shows you what happens when you don't properly tag your images. If you built another image using the `dev` tag. The same thing would happen to that image. But this is local testing and not a production release. So no big deal.

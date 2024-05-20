@@ -39,7 +39,7 @@ Starting Web Server
 Preparing to handle requests
 Ready for requests
 ```
-Lets see if it works. 
+Lets see if it works.
 
 Open up a second terminal and enter:
 ```shell
@@ -51,7 +51,7 @@ $ curl localhost:8080
 Hello from Integratn.IO!!!
 ```
 
-Now we are cooking. But what else can we do with this little container. 
+Now we are cooking. But what else can we do with this little container.
 
 Lets change the response from the curl request. We can do this by passing an environment variable into the container. We can do this one of two ways. We can edit the docker file. Add the [ENV](https://docs.docker.com/engine/reference/builder/#env) instruction. Tell it it we want `MESSAGE` to equal something else. Rebuild our image. Then finally run it again. This is a great method for establishing default values for environment variables. Or we can add the parameter [--env](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file) with a value to our `docker run` command and change it on the fly. Environment Variables passed during a `docker run` command will always trump what is in your Dockerfile. If you haven't exited the container already hit `ctrl +c` to exit the container from the terminal.
 
@@ -77,7 +77,7 @@ $ docker ps
 You will get an output similar to this but your `NAMES` field will not be the same.
 
 ```shell
-$ docker ps                     
+$ docker ps
 CONTAINER ID   IMAGE              COMMAND           CREATED         STATUS         PORTS                       NAMES
 56290825f889   helloFromIntegratnIO   "/go/bin/hello"   2 minutes ago   Up 2 minutes   127.0.0.1:8080->10000/tcp   hungry_bohr
 ```
@@ -89,11 +89,11 @@ docker exec --interactive --tty hungry_bohr /bin/sh
 Output:
 ```shell
 $ docker exec --interactive --tty hungry_bohr /bin/sh
-/go/src/integratnio/go-rest-api # 
+/go/src/integratnio/go-rest-api #
 ```
 Does that path look familiar? Its the same path we set for `WORKDIR` in the Dockerfile. We are in the shell of the container. Type `exit` and hit `enter` to leave the container.
 
-Lets look at the command real quick. 
+Lets look at the command real quick.
 
 `docker exec` is the base command. This is declaring that we want to execute something against a running container.
 `--interactive` will keep STDIN open even if we aren't attached.

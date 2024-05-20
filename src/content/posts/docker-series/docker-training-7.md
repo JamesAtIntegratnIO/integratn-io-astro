@@ -21,7 +21,7 @@ helloFromIntegratnIO   latest    8de75cb71a32   22 seconds ago   322MB
 
 Now lets look at our multistage image.
 ```sh
-ᐅ docker image ls                   
+ᐅ docker image ls
 REPOSITORY         TAG       IMAGE ID       CREATED         SIZE
 helloFromIntegratnIO   latest    d655734a72e2   2 seconds ago   308MB
 ```
@@ -59,8 +59,8 @@ COPY --from=builder /go/bin/hello /
 ENTRYPOINT ["/hello"]
 ```
 
-We did a couple tweaks here. 
-* We updated the base image to use that sweet tiny alpine image. 
+We did a couple tweaks here.
+* We updated the base image to use that sweet tiny alpine image.
 * We updated the `COPY` command to copy to the root instead of needlessly creating directories that we don't need.
 * We fixed the entrypoint to use that new file location.
 

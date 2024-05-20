@@ -22,7 +22,7 @@ First thing I did was install hugo. You can find instructions for it [here](http
 
 ## Version Control is Key
 
-After that I wanted to have git setup so that I had solid version control incase I broke anything. `git init` solved that really quickly. Then I created my repo on [Github](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/creating-a-new-repository). After you do that it will give you instructions on how to create your first commit and change your origin for the remote and push your code. 
+After that I wanted to have git setup so that I had solid version control incase I broke anything. `git init` solved that really quickly. Then I created my repo on [Github](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/creating-a-new-repository). After you do that it will give you instructions on how to create your first commit and change your origin for the remote and push your code.
 
 ## Gotta Make it Pretty
 
@@ -35,7 +35,7 @@ theme: "anubis" # This is the name of the folder in the themes directory
 
 ## Deploy It
 
-Now I have everything installed. Lets see it run. To run it locally to make sure everything works you can use `hugo serve`. But if you really want to get going then you will need to deploy it somewhere online. I put mine on netlify as I knew the name already and the process was simple enough. 
+Now I have everything installed. Lets see it run. To run it locally to make sure everything works you can use `hugo serve`. But if you really want to get going then you will need to deploy it somewhere online. I put mine on netlify as I knew the name already and the process was simple enough.
 
 Create your account on [netlify](https://app.netlify.com/signup). After your account is created you can create a new site with this magic button
 
@@ -123,7 +123,7 @@ After you have Google analytics setup. You can setup [Google Search](https://sea
 
 ### Additional Plugins
 
-Here are a couple other plugins I installed. 
+Here are a couple other plugins I installed.
 
 [Hugo cache resources](https://github.com/cdeleeuwe/netlify-plugin-hugo-cache-resources#readme):
 This plugin caches the resources folder after build. If you are processing many images, this would improve build duration significantly.

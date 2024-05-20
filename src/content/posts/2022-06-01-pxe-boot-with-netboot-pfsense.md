@@ -19,7 +19,7 @@ First thing we need to do is get a pxe server running. If you are running Unraid
 
 The base configuration is great for the most part. Make sure you don't have any port overlap issues. You cannot switch the pxe port 69. But the webui and the file server can be mapped to whatever port you need.
 
-Update `assets` to point somewhere on your unraid server. This is where you can host various things like your ubuntu autoinstall files. Mine is mapped to `/mnt/user/data/netboot/assets`. 
+Update `assets` to point somewhere on your unraid server. This is where you can host various things like your ubuntu autoinstall files. Mine is mapped to `/mnt/user/data/netboot/assets`.
 
 Other than that, scroll to the bottom and click apply. When its all finished you can see the WebUI on its port and the file server on the other.
 

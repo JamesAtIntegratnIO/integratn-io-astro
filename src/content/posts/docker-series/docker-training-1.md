@@ -8,7 +8,7 @@ description: Getting started with docker. In this tutorial we will take a quick 
 heroImage: /docker-training.webp
 ---
 
-Before we can really dive into this project we need take care of a few things. First we need to get our environment setup to run docker. Then we need to go over a couple things about Dockerfiles and the Docker CLI 
+Before we can really dive into this project we need take care of a few things. First we need to get our environment setup to run docker. Then we need to go over a couple things about Dockerfiles and the Docker CLI
 
 ## Installing Docker
 
@@ -53,7 +53,7 @@ ENTRYPOINT ["/go/bin/hello"]
 ```
 Lets step through the various instructions and see what they do. I have linked all of the instruction identifiers below. There are many others and can be found in the [Dockerfile Builder Documentation](https://docs.docker.com/engine/reference/builder/)
 
-The [__FROM__](https://docs.docker.com/engine/reference/builder/#from) is an instruction that initializes a new build stage sets a base image. This is the container that will run while we build our image. Right now we are consuming the Golang image from Alpine. We chose this image because it is lighter and faster than the official Golang image. You can find more about Alpine Linux and their images from [here](https://www.alpinelinux.org/about/). There are many other images to choose from and they can be found at [Docker Hub](https://hub.docker.com). 
+The [__FROM__](https://docs.docker.com/engine/reference/builder/#from) is an instruction that initializes a new build stage sets a base image. This is the container that will run while we build our image. Right now we are consuming the Golang image from Alpine. We chose this image because it is lighter and faster than the official Golang image. You can find more about Alpine Linux and their images from [here](https://www.alpinelinux.org/about/). There are many other images to choose from and they can be found at [Docker Hub](https://hub.docker.com).
 
 The [__RUN__](https://docs.docker.com/engine/reference/builder/#run) is how we execute a shell command inside the container that we are building from. This instruction will execute any commands that are passed to it.
 
@@ -69,9 +69,9 @@ The [__ENTRYPOINT__](https://docs.docker.com/engine/reference/builder/#entrypoin
 
 The Docker CLI is the main way we will interact with Docker. We will use it to build Docker images, run Docker containers and see whats going on in our Docker environment.
 
-### See the help menu: 
-```shell 
-docker help 
+### See the help menu:
+```shell
+docker help
 ```
 
 For any docker command, use `docker help $command` to learn more about the command and the options that are available for it. I highly encourage you run this on ever command below. There are many options that you can pass to commands and it will list the aliases that can be used to make the commands shorter and save save some typing
@@ -82,7 +82,7 @@ docker build . -t $MYIMAGENAME:$MYIMAGETAG
 ```
 Usage: `docker build [OPTIONS] PATH | URL | -`
 
-Generally when building an image you are in the root directory of your project. That directory also contains the Dockerfile that will be used to build the project. It is also important to tag your images so that you can find them in the future. This is the purpose of the `-t` in the command above. If you don't when you search through your images you will only see `None` as the image name. 
+Generally when building an image you are in the root directory of your project. That directory also contains the Dockerfile that will be used to build the project. It is also important to tag your images so that you can find them in the future. This is the purpose of the `-t` in the command above. If you don't when you search through your images you will only see `None` as the image name.
 
 ### Listing images in your local registry:
 ```shell
@@ -104,4 +104,3 @@ docker container ls --all
 docker logs $CONTAINERNAME | $CONTAINERID
 ```
 This is very helpful if you have a container that keeps crashing on startup.
-

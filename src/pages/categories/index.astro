@@ -1,25 +1,7 @@
 ---
-import { getCollection } from "astro:content";
-import CategoriesLayout from "../../layouts/CategoriesLayout.astro";
-const allPosts = await getCollection("posts");
-const categories: { category: string; count: number }[] = allPosts.reduce(
-  (acc: { category: string; count: number }[], post) => {
-    if (post.data && post.data.categories) {
-      post.data.categories.forEach((category) => {
-        const existingTag = acc.find((t) => t.category === category);
-        if (existingTag) {
-          existingTag.count++;
-        } else {
-          acc.push({ category, count: 1 });
-        }
-      });
-    }
-    return acc;
-  },
-  [],
-);
+import IndexCloudLayout from "../../layouts/IndexCloudLayout.astro";
 
-const pageTitle = "Tag Index";
+const pageTitle = "Categories Index";
 ---
 
-<CategoriesLayout title={pageTitle} categories={categories} />
+<IndexCloudLayout title={pageTitle} property="categories" />

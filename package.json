@@ -30,6 +30,7 @@
     "eslint": "9.x",
     "eslint-plugin-react": "^7.34.1",
     "globals": "^15.3.0",
+    "prettier": "^3.2.5",
     "typescript-eslint": "^7.9.0"
   }
 }

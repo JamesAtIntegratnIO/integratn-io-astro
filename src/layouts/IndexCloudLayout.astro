@@ -44,7 +44,7 @@ chunks.push(names.slice(names.length - 3, names.length));
       chunks.map((chunk) => (
         <div class="name-chunk">
           {chunk.map((name: { name: string; count: number }) => (
-            <a href={`/names/${name.name}`}>
+            <a href={`/${property}/${name.name}`}>
               <span
                 class="name"
                 style={{

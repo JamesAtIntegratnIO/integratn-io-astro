@@ -21,6 +21,7 @@
             nodejs_22
             nodePackages.yarn
             nodePackages.npm
+            pre-commit
           ];
         };
       }

@@ -54,4 +54,4 @@ helloFromIntegratnIO    dev    285c3af572b0   5 seconds ago    321MB
 helloFromIntegratnIO    prod   0c2fb67c8edc   14 seconds ago   306MB
 ```
 
-Just look at those savings. But we can go deeper, and we will in lesson 7. 
+Just look at those savings. But we can go deeper, and we will in lesson 7.

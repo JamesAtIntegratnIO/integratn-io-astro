@@ -21,7 +21,7 @@ Most languages these days support some sort of live reload to allow developers t
 
 ## Running The Container
 
-Running this container so that we can actually work inside it with our editor is going to take a bit more than we've done before. We are actually going to leverage an image we haven't built ourselves this time. Lets take look at the image we are going to use. [cosmtrek/air](https://hub.docker.com/r/cosmtrek/air). Please take a minute to explore the image link if you haven't explored Dockerhub before. The `Overview` tab will give you a rundown of how to use the image. The `Tags` tab will show you different tags you can consume. So if we scroll down on the overview you will see how to run it `The Docker Way`. So lets do that. 
+Running this container so that we can actually work inside it with our editor is going to take a bit more than we've done before. We are actually going to leverage an image we haven't built ourselves this time. Lets take look at the image we are going to use. [cosmtrek/air](https://hub.docker.com/r/cosmtrek/air). Please take a minute to explore the image link if you haven't explored Dockerhub before. The `Overview` tab will give you a rundown of how to use the image. The `Tags` tab will show you different tags you can consume. So if we scroll down on the overview you will see how to run it `The Docker Way`. So lets do that.
 
 First we need to pull the image down.
 ```
@@ -37,7 +37,7 @@ Lets add a little config for air so that it will cleanup for us when its done. I
 
 # Working directory
 # . or absolute path, please note that the directories following must be under root.
-root = "." 
+root = "."
 tmp_dir = "tmp"
 [build]
 # It's not necessary to trigger build each time file changes if it's too frequent.
@@ -76,7 +76,7 @@ Theres a lot going on there. So lets break it down.
 
 `-w`: Just like in our Dockerfile. This lets us declare `WORKDIR`
 
-`-v`: This is short for `--volume` This will mount our `$projectRoot/go-rest-api` at `/app` inside the container. the \`pwd\` is just a little shorthand to get our present working directory. Otherwise we would have to declare the full path of what we want to mount inside the container. 
+`-v`: This is short for `--volume` This will mount our `$projectRoot/go-rest-api` at `/app` inside the container. the \`pwd\` is just a little shorthand to get our present working directory. Otherwise we would have to declare the full path of what we want to mount inside the container.
 
 `-p 8080:10000` Port mapping just like before.
 
@@ -93,8 +93,8 @@ $ docker run -it --rm\
     cosmtrek/air \
     -c .air.conf
 
-  __    _   ___  
- / /\  | | | |_) 
+  __    _   ___
+ / /\  | | | |_)
 /_/--\ |_| |_| \_ // live reload for Go apps [v1.11.1]
 
 mkdir /app/tmp
@@ -132,8 +132,8 @@ $ docker run -it --rm\
     cosmtrek/air:v1.15.1 \
     -c .air.conf
 
-  __    _   ___  
- / /\  | | | |_) 
+  __    _   ___
+ / /\  | | | |_)
 /_/--\ |_| |_| \_ v1.15.1 // live reload for Go apps, with Go 1.15.5
 
 mkdir /app/tmp

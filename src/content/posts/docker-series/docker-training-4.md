@@ -3,7 +3,7 @@ draft: false
 title: Docker Training 4 - Managing The Build Context
 pubDate: July 21, 2021
 categories:
-  - tutorial 
+  - tutorial
   - docker
 tags:
   - docker-series
@@ -34,7 +34,7 @@ myApp/
     dockerfile
     .dockerignore
 ```
-Pretty simple app structure. What part of this do we really need to build this app? the `src/myApp` for sure. But the rest would all just be bloat to our build context. 
+Pretty simple app structure. What part of this do we really need to build this app? the `src/myApp` for sure. But the rest would all just be bloat to our build context.
 
 Remember the output we had from our `docker build` command?
 
@@ -76,7 +76,7 @@ That happened so quick we didn't even talk about it before. When building your c
 
 So lets create a .dockerignore for the file structure example I posted earlier.
 
-```shell 
+```shell
 .git/
 .github/
 docs/

@@ -24,9 +24,11 @@ Most languages these days support some sort of live reload to allow developers t
 Running this container so that we can actually work inside it with our editor is going to take a bit more than we've done before. We are actually going to leverage an image we haven't built ourselves this time. Lets take look at the image we are going to use. [cosmtrek/air](https://hub.docker.com/r/cosmtrek/air). Please take a minute to explore the image link if you haven't explored Dockerhub before. The `Overview` tab will give you a rundown of how to use the image. The `Tags` tab will show you different tags you can consume. So if we scroll down on the overview you will see how to run it `The Docker Way`. So lets do that.
 
 First we need to pull the image down.
-```
+
+```shell
 docker pull cosmtrek/air
 ```
+
 If we wanted to consume a specific tag then we could do that as well. Just make sure you also use that tag in the following docker run command.
 
 Lets add a little config for air so that it will cleanup for us when its done. In `$projectRoot/go-rest-api/`, lets add `.air.conf` and fill it with the following then save.
@@ -57,6 +59,7 @@ clean_on_exit = true
 ```
 
 Now lets run this image and load our code into on the fly
+
 ```shell
 docker run -it --rm\
     -w /app/ \
@@ -85,6 +88,7 @@ Theres a lot going on there. So lets break it down.
 `-c .air.conf` Because we declared `-it` we are able to pass parameters to `ENTRYPOINT` of the container. We are leveraging this to pass in the configuration file we created.
 
 You should have gotten an output like this.
+
 ```shell
 $ docker run -it --rm\
     -w /app/ \
@@ -108,7 +112,8 @@ Ready for requests
 ```
 
 So looking at this right off the bat. We see that it spun up `v1.11.1`. Thats old. Lets do this again using a version tag to run a newer version. (If you are doing this later. You may have gotten a different version. But at the time of writing. It looks like new images are being pushed but `latest` isn't being updated)
-```
+
+```shell
 docker run -it --rm\
     -e GO111MODULE=off
     -w /app/ \
@@ -123,7 +128,8 @@ You'll notice this time. We skipped the pull step. Yay Shortcuts. There was one 
 `-e GO111MODULE=off`: GO111MODULE in its most simplest terms tells go whether to look for and require go modules. Getting into all of that really isn't the point of this. But if you are curious, this [blog](https://dev.to/maelvls/why-is-go111module-everywhere-and-everything-about-go-modules-24k) was a great read.
 
 But we are running again. And look. Our go version is more recent
-```
+
+```shell
 $ docker run -it --rm\
     -e GO111MODULE=off \
     -w /app/ \
@@ -147,14 +153,18 @@ Ready for requests
 ```
 
 So lets see if our curl still works.
+
 ```shell
 curl localhost:8080
 ```
+
 Output:
+
 ```shell
 $ curl localhost:8080
 Hello From integratnio
 ```
+
 Great the app is still working. Now lets make a code change and watch the live reload do its thing.
 
 ## Making a change
@@ -162,6 +172,7 @@ Great the app is still working. Now lets make a code change and watch the live r
 Open up `$projectRoot/go-rest-api/main.go`. On line 11 you will see `message` declared. Lets change the value of that line and save the file. Feel free to change it to anything you want. But I'm going to change it to `Yay we did it`
 
 Watch the terminal running your dev container when you hit save.
+
 ```shell
 main.go has changed
 building...
@@ -170,12 +181,15 @@ Starting Web Server
 Preparing to handle requests
 Ready for requests
 ```
+
 Magic.
 
 Lets test that curl request again.
 Output:
+
 ```shell
 $ curl localhost:8080
 Yay We Did It
 ```
+
 Look at that. This is just one example of how to do this. For a node app you could use `npm run dev:watch` as your entrypoint and get a similar effect. Pick your code flavor and I bet you could figure out a way to do this.

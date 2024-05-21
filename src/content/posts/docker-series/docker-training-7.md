@@ -8,7 +8,7 @@ description: We are going to trim the fat off our image and make it production r
 heroImage: /docker-training.webp
 ---
 
-# Trimming the Fat for Production
+## Trimming the Fat for Production
 
 In our last lesson we briefly went over how a mutlistage build works. Lets poke at that a little more. To start. Lets look at our base image again.
 

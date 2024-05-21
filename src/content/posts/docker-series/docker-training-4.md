@@ -20,8 +20,7 @@ So far we have created a small api that runs in a container. We've tested that i
 The most common way to work with the build context is to build an image based on our current path. How we do `docker build . -t repository:version` We are doing this with a relatively small app. So we haven't gone over a few things that you will see in a larger project. One of the first things you will see in a larger project is a [.dockerignore](https://docs.docker.com/engine/reference/builder/#dockerignore-file) file. This is a lot like your `.gitignore`. We don't need every file in our repo to build our image. So why are we going to bring them into the build context. If you are doing a huge data science project with large sample model files. Or a financial model project with 100s of .csv files to test against. Now, I won't get into the argument about if that data really belongs in the repo. Thats not the purpose of this series. But if it is we don't need it to build our base image to run our app.
 
 So take this structure for example:
-
-```plaintext
+```
 myApp/
     .git/
     .github/
@@ -35,7 +34,6 @@ myApp/
     dockerfile
     .dockerignore
 ```
-
 Pretty simple app structure. What part of this do we really need to build this app? the `src/myApp` for sure. But the rest would all just be bloat to our build context.
 
 Remember the output we had from our `docker build` command?
@@ -70,8 +68,7 @@ Successfully tagged helloFromIntegratnIO:latest
 ```
 
 Look at line 2 of that output.
-
-```plaintext
+```
 Sending build context to Docker daemon  144.4kB
 ````
 
@@ -85,5 +82,4 @@ So lets create a .dockerignore for the file structure example I posted earlier.
 docs/
 scripts/
 ```
-
 There are other ways to pass a build context. You could pass a URL, a tar file and more. Docker has built great documentation around all of it [here](https://docs.docker.com/engine/reference/commandline/build/).

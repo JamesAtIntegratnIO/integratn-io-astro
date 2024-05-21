@@ -15,7 +15,6 @@ description: A quick guide on setting up a pxe server with netboot.xyz on unraid
 Here is a quick one on setting up a pxe server for your home lab that I just finally clicked for me.
 
 ## Setting up Netboot.xyz on Unraid
-
 First thing we need to do is get a pxe server running. If you are running Unraid, then great. netboot.xyz has a docker app setup and ready to go. All we have to do is configure it.
 
 The base configuration is great for the most part. Make sure you don't have any port overlap issues. You cannot switch the pxe port 69. But the webui and the file server can be mapped to whatever port you need.
@@ -27,7 +26,6 @@ Other than that, scroll to the bottom and click apply. When its all finished you
 We are done here. Lets move on.
 
 ## Setting up your DHCP Server on PFSense for PXE boot
-
 1. Navigate to `Services > DHCP Server`
 2. Select the DHCP Server that you are going to configure
 3. Check `Enable Network Booting`

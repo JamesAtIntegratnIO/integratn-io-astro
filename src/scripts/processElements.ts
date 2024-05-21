@@ -19,6 +19,7 @@ export async function countPostElement(property: keyof PostData): Promise<{ name
 
     if (Array.isArray(postDataProperty)) {
       postDataProperty.forEach((name) => {
+        console.log(`name: ${name}`)
         const existingTag = acc.find((t) => t.name === name);
         if (existingTag) {
           existingTag.count++;
@@ -27,6 +28,9 @@ export async function countPostElement(property: keyof PostData): Promise<{ name
         }
       });
     }
+    acc.forEach((tag) => {
+      console.log(`name: ${tag.name}`);
+    });
     return acc;
   }, []);
 }

@@ -29,7 +29,6 @@ After that I wanted to have git setup so that I had solid version control incase
 Next up is adding the theme. You can find a lot of them on the [Hugo site](https://themes.gohugo.io/). Use `git submodule add ${url to theme repo} themes/{theme-name}` to put it in place.
 
 After you get your theme in place you will need to update your config.yaml to actually use it. You would do this by adding a line like:
-
 ```yaml
 theme: "anubis" # This is the name of the folder in the themes directory
 ```
@@ -45,7 +44,6 @@ Create your account on [netlify](https://app.netlify.com/signup). After your acc
 After this you will go through some steps to connect it to your github repository and a deploy should be triggered. When its all said and done you should have your new site up and ready to go.
 
 This includes setting up your `netlify.toml`
-
 ```toml
 [build]
 publish = "public"
@@ -82,7 +80,6 @@ HUGO_ENABLEGITINFO = "true"
 ## Adding Netlify CMS
 
 You can find the getting started documentation [here](https://www.netlifycms.org/docs/intro/). You'll notice we didn't use the Hugo Template that they offer. That thing is outdated and I was unable to get it to work well with a theme for local development. It was much easier to add it to an [existing site](https://www.netlifycms.org/docs/add-to-your-site/). Read that doc. It will answer most of your questions. But here is my config.yml (make sure you use `.yml` and not `.yaml`. It only looks for the one).
-
 ```yaml
 backend:
   name: git-gateway
@@ -110,7 +107,6 @@ collections:
       - {label: "No Comment", name: "nocomment", widget: "boolean", default: false}
       - {label: "Body", name: "body", widget: "markdown"}
 ```
-
 Your collections are built based on your hugo [archetypes](https://gohugo.io/content-management/archetypes/). There are a couple extra widgets that I don't use. Those can be found in the [widget doc](https://www.netlifycms.org/docs/widgets)
 
 Make sure you get through the whole doc and complete the authentication steps or anyone will be able to access the cms features.
@@ -118,13 +114,11 @@ Make sure you get through the whole doc and complete the authentication steps or
 ## Additional Things to Setup
 
 ### Analytics
-
 Pay for netlify analytics or add [Google analytics](https://analytics.google.com/). Most themes have Google analytics baked in and you just have to add the params to your `config.yaml` to connect it. Here are the two posts I followed to get it setup. [cloudywithachanceofdevops.com](http://cloudywithachanceofdevops.com/posts/2018/05/17/setting-up-google-analytics-on-hugo/) and [gideonwolfe.com](https://gideonwolfe.com/posts/sysadmin/hugo/hugogoogleanalytics/).
 
 Make sure you filter out your connections to your site so that you don't skew your own analytics. This blog post from [daniloaz.com](https://www.daniloaz.com/en/5-ways-to-exclude-your-own-visits-from-google-analytics/) really helped get me through it. I went with the second method of filtering out my public IP as internal traffic.
 
 ### Search
-
 After you have Google analytics setup. You can setup [Google Search](https://search.google.com/search-console) to the same property that you setup in google analytics. It helps to have a sitemap.xml to add. The easiest way I found to do that was to use the [sitemap netlify plugin](https://github.com/netlify-labs/netlify-plugin-sitemap#readme) I recommend just installing it from the plugins tab on your Netlify site. Much easier to manage.
 
 ### Additional Plugins

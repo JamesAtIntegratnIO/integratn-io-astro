@@ -8,9 +8,10 @@ description: Lets talk about Multi Stage Builds
 heroImage: /docker-training.webp
 ---
 
-# Multi Stage Builds
+## Multi Stage Builds
 
 ## Back Story
+
 So way back in the beginning of this we briefly discussed layers. Each line in a dockerfile adds a layer. Which means it adds size to the dockerfile.
 
 Lets look at when we added git to our first image.
@@ -48,7 +49,7 @@ ENTRYPOINT ["/go/bin/hello"]
 
 Alright. Looks good right? So far this is pretty simple. We used the same base image but we only copied our binary from the first image into the second. We could also use a different base image if we wanted. This is a real simple app with no external dependencies. So the fat trimmed is minimal. But pattern still helped us save some space.
 
-```
+```shell
 REPOSITORY          TAG    IMAGE ID       CREATED          SIZE
 helloFromIntegratnIO    dev    285c3af572b0   5 seconds ago    321MB
 helloFromIntegratnIO    prod   0c2fb67c8edc   14 seconds ago   306MB

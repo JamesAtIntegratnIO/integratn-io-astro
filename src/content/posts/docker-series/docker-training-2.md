@@ -11,15 +11,18 @@ heroImage: /docker-training.webp
 The goal of this project is not to learn how to build APIs in Golang or anything extra. If you want to learn more about the snippet below feel free to dig through the [Go Docs](https://golang.org/pkg/net/http/). Now lets create files and get started.
 
 To get started we need to create a project to store our app we are going to work with. Create the following structure. We'll keep filling more in as we go later.
+
 ```shell
 DockerTraining/
     go-rest-api/
         main.go
     dockerfile
 ```
+
 Initialize the folder as a go project
+
 ```shell
-$ GO111MODULE=on go mod init helloFromIntegratnIO
+GO111MODULE=on go mod init helloFromIntegratnIO
 ```
 
 Add the following code to main.go
@@ -28,33 +31,34 @@ Add the following code to main.go
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
-	"os"
+ "fmt"
+ "log"
+ "net/http"
+ "os"
 )
 
 func helloFromIntegratnIO(w http.ResponseWriter, r *http.Request) {
-	message := "Hello From Integratn.IO"
-	if m := os.Getenv("MESSAGE"); m != "" {
-		message = m
-	}
-	fmt.Fprintf(w, "%s\n", message)
-	fmt.Println("Endpoint Hit: helloFromIntegratnIO")
+ message := "Hello From Integratn.IO"
+ if m := os.Getenv("MESSAGE"); m != "" {
+  message = m
+ }
+ fmt.Fprintf(w, "%s\n", message)
+ fmt.Println("Endpoint Hit: helloFromIntegratnIO")
 }
 
 func handleRequests() {
-	http.HandleFunc("/", helloFromIntegratnIO)
-	log.Fatal(http.ListenAndServe(":10000", nil))
+ http.HandleFunc("/", helloFromIntegratnIO)
+ log.Fatal(http.ListenAndServe(":10000", nil))
 }
 
 func main() {
-	fmt.Println("Starting Web Server")
-	fmt.Println("Preparing to handle requests")
-	fmt.Println("Ready for requests")
-	handleRequests()
+ fmt.Println("Starting Web Server")
+ fmt.Println("Preparing to handle requests")
+ fmt.Println("Ready for requests")
+ handleRequests()
 }
 ```
+
 Not a whole lot going on up there. We create a ResponseWriter that prints some text whenever you hit the app on port 10000.
 
 Lets get our dockerfile filled in.
@@ -158,11 +162,13 @@ Step 6/7 __RUN__ uses the go executable again to build the app.
 Step 7/7 __ENTRYPOINT__ declares the what to start with the container.
 
 The image is built. But where did it go? Lets use `docker image ls` to find it
+
 ```shell
 ᐅ docker image ls
 REPOSITORY          TAG       IMAGE ID            CREATED             SIZE
 helloFromIntegratnIO    latest    dee090a053a3        About an hour ago   321MB
 ```
+
 Heres how this output breaks down:
 
 REPOSITORY: The name we gave our image.

@@ -9,7 +9,6 @@ description: "Discover how to simplify Kubernetes deployments using Kustomized H
 
 Managing Kubernetes applications can be a complex endeavor, especially when dealing with multiple environments and configurations. To streamline this process, we've developed the Kustomized Helm Action—a powerful GitHub Action that simplifies the generation and management of Kubernetes manifests using Helm charts and Kustomize overlays.<!--more--> In this blog post, we'll explore how this action works, its key features, and how you can integrate it into your CI/CD pipeline for efficient Kubernetes deployments using ArgoCD.
 
-
 ## Why Use Kustomized Helm Action for Kubernetes Deployments?
 
 Kubernetes manifests are essential for defining the desired state of your cluster's resources. However, managing these manifests can become cumbersome as your application grows and evolves. Helm and Kustomize are two popular tools that help with this, but integrating them into your workflow often requires manual steps and additional scripting.

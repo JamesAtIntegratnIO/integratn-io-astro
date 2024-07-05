@@ -88,7 +88,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Generate manifests
-        uses: your-github-username/kustomized-helm-action@v1
+        uses: jamesAtIntegratnIO/kustomized-helm-action@v1.2.0
         with:
           source_folder: 'dev'
           destination_branch: 'manifests'

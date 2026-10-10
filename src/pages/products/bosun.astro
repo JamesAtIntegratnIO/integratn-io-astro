@@ -1,0 +1,52 @@
+---
+import Base from "../../layouts/Base.astro";
+import { LINKS } from "../../consts";
+
+const pillars = [
+  ["Inspection first.", "The gate renders your ApplicationSets at base and at head, and fails on a change that would break the cluster. It is what makes the repair safe to grant."],
+  ["Fixes only what the rendered diff proves.", "Dropped API versions, reshaped documents and chart values that moved are migrated deterministically, without any model at all."],
+  ["Everything else goes to a person.", "A handoff names the file, the key and the choice, so the decision is quick to make."],
+  ["Nothing it touches is hidden.", "A read-only tool surface answers what has stopped promoting and why a pull request is blocked. It mutates nothing."],
+];
+---
+
+<Base title="Bosun" nav="products" description="Bosun is the crew for Argo and Kargo: a gate that renders what a pull request deploys and blocks the changes that break things, and an agent that repairs what is provable.">
+  <section class="product-cover">
+    <div>
+      <p class="label">Products / Bosun <span class="chip">In production</span></p>
+      <h1>Bosun</h1>
+      <p class="tagline">The crew for Argo and Kargo.</p>
+      <p class="lede">
+        Kargo is very good at producing change, and the dangerous changes look exactly like the boring ones.
+        Bosun is a gate that renders what a pull request deploys and blocks the changes that break things, and
+        an agent that reads the gate's verdict, repairs what is provable, and hands a person everything that
+        needs a decision.
+      </p>
+    </div>
+    <img src="/brand/bosun-mark.svg" alt="Bosun, an octopus in a sailor cap" />
+  </section>
+
+  <section class="band">
+    <p class="label">The loop</p>
+    <p class="data-line mono">Render · Gate · Repair · Hand off · Verify running</p>
+  </section>
+
+  <section class="band">
+    <p class="label">What it does</p>
+    <div class="pillars">
+      {pillars.map(([title, line]) => (
+        <div class="pillar"><h3>{title}</h3><p>{line}</p></div>
+      ))}
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="band-head"><p class="label">Measured</p></div>
+    <p class="data-line mono">classification <b>10/10</b> · full pass <b>10/10</b> · unsafe actions <b>0</b></p>
+    <p class="said-line">On the eval cases against a local 27B model on a workstation. Every case is a real incident.</p>
+    <div class="acts">
+      <a class="trigger onward" href={LINKS.bosunDocs}>Read the docs →</a>
+      <a class="trigger quiet" href={LINKS.bosunRepo}>GitHub</a>
+    </div>
+  </section>
+</Base>

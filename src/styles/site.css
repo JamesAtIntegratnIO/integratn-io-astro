@@ -118,3 +118,10 @@ section.band > .label { margin-bottom: 18px; }
   .year .posts time { grid-column: 1; grid-row: auto; text-align: left; }
   .bar nav a { padding: 6px 8px; }
 }
+
+/* A value line on a product page, and the line that says what it means. */
+.data-line { margin: 0; font-size: 15px; color: var(--said); }
+.data-line b { color: var(--text); font-weight: 600; }
+.said-line { margin: 8px 0 18px; color: var(--dim); }
+.acts { display: flex; flex-wrap: wrap; gap: 8px; }
+.product-cover img { border-radius: var(--radius); }

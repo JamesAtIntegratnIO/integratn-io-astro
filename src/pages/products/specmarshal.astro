@@ -1,0 +1,64 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const pillars = [
+  ["Start with a spec, not a prompt.", "Work is written down first and split into tickets, so what is startable, blocked or waiting is always known."],
+  ["Code is verified, not self-declared.", "After each ticket Specmarshal runs your project's own gate and decides for itself. The agent never gets that vote."],
+  ["Reviewed, verified, ready to merge.", "A separate review ticks the acceptance criteria. A run leaves reviewed branches; nothing lands until someone reads them."],
+  ["You stay in control.", "Pause a run, steer it with a note for the next attempt, or release a parked ticket."],
+];
+---
+
+<Base title="Specmarshal" nav="products" description="Specmarshal orchestrates autonomous coding agents over your specs, with real gates, real review, and a person in control. Coming soon.">
+  <section class="product-cover">
+    <div>
+      <p class="label">Products / Specmarshal <span class="chip">Coming soon</span></p>
+      <h1>Specmarshal</h1>
+      <p class="tagline">From spec to software. Under control.</p>
+      <p class="lede">
+        Specmarshal orchestrates autonomous coding agents over your specs, with real gates, real review, and a
+        person in control. A spec is broken into small tickets; each gets a fresh agent in its own sandbox and
+        ends in a branch someone reviews.
+      </p>
+    </div>
+    <img src="/brand/specmarshal-mark.svg" alt="The Specmarshal mark" />
+  </section>
+
+  <section class="band">
+    <p class="label">One run, as you would watch it</p>
+    <!-- The phase strip from Specmarshal's own run page, drawn with the product's stylesheet. -->
+    <div class="phase-strip border border-solid border-border rounded-[var(--radius)]">
+      <ol class="phase-steps">
+        <li class="phase-step done"><div class="phase-head"><span class="phase-mark">✓</span><span class="phase-name">Plan</span></div><span class="phase-who">planner</span></li>
+        <li class="phase-step going" aria-current="step">
+          <div class="phase-head"><span class="phase-mark">▸</span><span class="phase-name">Tickets</span></div>
+          <div class="phase-inner">
+            <ol class="phase-inner-steps">
+              <li class="phase-inner-step done"><span class="phase-mark">✓</span>build</li>
+              <li class="phase-inner-step going"><span class="phase-mark">▸</span>gate<span class="phase-inner-who">orchestrator</span></li>
+              <li class="phase-inner-step to-come"><span class="phase-mark">○</span>review</li>
+            </ol>
+            <span class="phase-count">4 / 9</span>
+          </div>
+          <p class="phase-sentence">Each ticket gets a fresh worker in its own sandbox; the project's gate decides whether it is done.</p>
+        </li>
+        <li class="phase-step to-come"><div class="phase-head"><span class="phase-mark">○</span><span class="phase-name">Merge-ready</span></div><span class="phase-who">you</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band">
+    <p class="label">What it does</p>
+    <div class="pillars">
+      {pillars.map(([title, line]) => (
+        <div class="pillar"><h3>{title}</h3><p>{line}</p></div>
+      ))}
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="callout plain">
+      <p style="margin:0"><strong>Specmarshal is in private alpha.</strong> There is nothing to sign up for yet. This page will say when there is, and the blog will cover how it was built.</p>
+    </div>
+  </section>
+</Base>

@@ -1,45 +1,88 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import LatestBlog from "../components/LatestBlog.astro";
+import Base from "../layouts/Base.astro";
+import About from "../components/About.astro";
+import PostList from "../components/PostList.astro";
+import { LINKS, SITE_TAGLINE } from "../consts";
+import { publishedPosts } from "../posts";
 
-const title = "Integratn.io - Home";
-const description = "Welcome to Integratn.io! Here you will find tutorials and ideas about the topics I'm constantly exploring. Whether you're a beginner or an experienced developer, there's something here for everyone. From web development, homelab to DevOps, I cover a wide range of topics to help you expand your knowledge and skills.";
+const posts = await publishedPosts();
+const beliefs = [
+  ["Engineered systems", "Modular by design. Stronger together."],
+  ["Governed autonomy", "Freedom within clear boundaries."],
+  ["Controlled joins", "Connect the right parts, the right way."],
+  ["Operator trust", "Visible systems. Measurable outcomes."],
+];
 ---
 
-<style>
-	.prose {
-		max-width: 720px;
-		margin: 0 auto;
-		padding: 0 1rem;
-	}
-	article {
-		padding: 3em 1em;
-	}
-</style>
-<BaseLayout title={title} description={description} >
-	<article>
-		<div class="prose">
-			<h1>Welcome to Integratn.io!</h1>
-			<p>
-				Here you will find tutorials and ideas about the topics I'm constantly
-				exploring.
-			</p>
-			<p>
-				Whether you're a beginner or an experienced developer, there's something
-				here for everyone. From web development, homelab to DevOps, I cover a
-				wide range of topics to help you expand your knowledge and skills.
-			</p>
-			<p>
-				Feel free to browse through the articles and tutorials, and don't
-				hesitate to reach out if you have any questions or suggestions. I'm
-				always happy to hear from fellow developers and learners.
-			</p>
-			<p>
-				So, let's embark on this journey together and explore the fascinating
-				world of technology and programming!
-			</p>
-			<h2>Latest Article</h2>
-			<LatestBlog />
-		</div>
-	</article>
-</BaseLayout>
+<Base nav="home">
+  <section class="cover">
+    <div>
+      <p class="label">{SITE_TAGLINE}</p>
+      <h1>Independent parts. Engineered together.</h1>
+      <p class="tagline">
+        We build disciplined platforms and products for governed autonomous software work. Each product puts
+        a gate between an agent and done, and hands a person only what needs a decision.
+      </p>
+    </div>
+    <img class="cover-mark" src="/brand/integratn-mark.svg" alt="The Integratn mark" />
+  </section>
+
+  <section class="band">
+    <p class="label">What we believe</p>
+    <h2 class="band-title">Controlled autonomy. Real engineering. Measurable outcomes.</h2>
+    <div class="beliefs">
+      {beliefs.map(([title, line], i) => (
+        <div class="pillar">
+          <span class="mono">0{i + 1}</span>
+          <h3>{title}</h3>
+          <p>{line}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="band" id="products">
+    <p class="label">Products</p>
+    <div class="products">
+      <article class="product">
+        <header>
+          <img src="/brand/specmarshal-mark.svg" alt="" />
+          <div><h2>Specmarshal</h2><p>From spec to software. Under control.</p></div>
+          <span class="chip">Coming soon</span>
+        </header>
+        <p>
+          Runs coding agents against a spec until every ticket in it passes your project's own checks. Each
+          ticket gets a fresh agent in its own sandbox and ends in a branch someone reviews.
+        </p>
+        <p class="data">Spec · Plan · Build · Verify · Review · Merge-ready</p>
+        <div class="acts"><a class="trigger onward" href="/products/specmarshal/">About Specmarshal →</a></div>
+      </article>
+      <article class="product">
+        <header>
+          <img src="/brand/bosun-mark.svg" alt="" />
+          <div><h2>Bosun</h2><p>The crew for Argo and Kargo.</p></div>
+          <span class="chip">In production</span>
+        </header>
+        <p>
+          A gate that renders what a pull request deploys and blocks the changes that break things, and an
+          agent that repairs what the diff proves is mechanical and hands a person the rest.
+        </p>
+        <p class="data">eval: classification <b>10/10</b> · full pass <b>10/10</b> · unsafe actions <b>0</b></p>
+        <div class="acts">
+          <a class="trigger onward" href={LINKS.bosunDocs}>Read the docs →</a>
+          <a class="trigger quiet" href={LINKS.bosunRepo}>GitHub</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="band-head"><p class="label">Latest writing</p><a href="/blog/">All {posts.length} posts →</a></div>
+    <PostList posts={posts.slice(0, 4)} />
+  </section>
+
+  <section class="band" id="about">
+    <p class="label">About</p>
+    <About />
+  </section>
+</Base>

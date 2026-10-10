@@ -3,7 +3,7 @@ type PostData = {
   title: string;
   description: string;
   pubDate: Date;
-  heroImage: string;
+  heroImage?: string;
   tags?: string[];
   updatedDate?: Date;
   series?: string;

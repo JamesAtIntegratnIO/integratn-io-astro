@@ -11,7 +11,7 @@ const latestPost: any = posts.sort((a, b) => new Date(b.data.pubDate).getTime() 
   <main>
     <section>
       <article>
-        <a href={`/posts/${latestPost.slug}/`}>
+        <a href={`/posts/${latestPost.id}/`}>
           <div class="post" style={{ position: "relative" }}>
             <img
               class="post-image"

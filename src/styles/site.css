@@ -110,8 +110,12 @@ section.band > .label { margin-bottom: 18px; }
 @media (max-width: 52rem) {
   .cover, .product-cover { grid-template-columns: minmax(0, 1fr); padding-top: 48px; }
   .cover h1, .product-cover h1 { font-size: 44px; }
-  .cover-mark { width: 120px; height: 120px; }
-  .product-cover img { width: 96px; height: 96px; }
+  /* One column: the front page's mark is already in the bar, so the cover drops
+     it rather than leaving it stranded under the text; a product's mark moves
+     above its name, where it introduces the page. */
+  .cover-mark { display: none; }
+  .product-cover { gap: 18px; }
+  .product-cover img { order: -1; width: 64px; height: 64px; }
   .products, .pillars, .beliefs, .about { grid-template-columns: minmax(0, 1fr); }
   .posts li, .year, .year .posts li { grid-template-columns: minmax(0, 1fr); }
   .posts p, .year .posts p { grid-column: 1; }

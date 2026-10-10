@@ -1,0 +1,8 @@
+# Netlify builds the static site with the same Node and command as the Build
+# workflow, rather than whatever the site's UI settings and build image default to.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"

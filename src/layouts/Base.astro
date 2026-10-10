@@ -11,12 +11,14 @@ interface Props {
   title?: string;
   description?: string;
   nav?: Nav;
+  /** The link-preview card, a 1200x630 PNG under public/og/ (made by `npm run og`). */
+  image?: string;
 }
 
-const { title, description = SITE_DESCRIPTION, nav } = Astro.props;
+const { title, description = SITE_DESCRIPTION, nav, image: card = "/og/integratn.png" } = Astro.props;
 const fullTitle = title ? `${title} · ${SITE_TITLE}` : SITE_TITLE;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const image = new URL("/brand/integratn-mark.svg", Astro.site);
+const image = new URL(card, Astro.site);
 const destinations: [Nav, string, string][] = [
   ["products", "Products", "/#products"],
   ["blog", "Blog", "/blog/"],
@@ -39,7 +41,13 @@ const destinations: [Nav, string, string][] = [
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
+    <meta property="og:site_name" content={SITE_TITLE} />
     <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={fullTitle} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#0a0c10" />
     <Fragment set:html={THEME_HEAD_SCRIPT} />
   </head>
   <body class="site">

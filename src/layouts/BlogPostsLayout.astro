@@ -18,7 +18,7 @@ const { posts, title } = Astro.props;
             )
             .map((post: any) => (
               <li>
-                <a href={`/posts/${post.slug}/`}>
+                <a href={`/posts/${post.id}/`}>
                   <div class="post" style={{ position: "relative" }}>
                     <img
                       class="post-image"

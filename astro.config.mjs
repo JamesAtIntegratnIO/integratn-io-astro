@@ -3,7 +3,6 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 import tailwind from "@astrojs/tailwind";
-import netlify from '@astrojs/netlify/static';
 import robotsTxt from 'astro-robots-txt';
 
 
@@ -16,5 +15,4 @@ export default defineConfig({
     tailwind(),
     robotsTxt()
   ],
-  adapter: netlify(),
 });

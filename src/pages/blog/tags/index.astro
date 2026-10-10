@@ -1,0 +1,15 @@
+---
+import Base from "../../../layouts/Base.astro";
+import { groupBy, publishedPosts, titleCase } from "../../../posts";
+
+const groups = groupBy(await publishedPosts(), "tags");
+---
+
+<Base title="Tags" nav="blog">
+  <div class="page-head"><p class="trail"><a href="/">Integratn</a> / <a href="/blog/">Blog</a> / Tags</p><h1>Tags</h1></div>
+  <ul class="terms">
+    {[...groups].map(([name, posts]) => (
+      <li><a class="chip" href={`/blog/tags/${name}/`}>{titleCase(name)} · {posts.length}</a></li>
+    ))}
+  </ul>
+</Base>

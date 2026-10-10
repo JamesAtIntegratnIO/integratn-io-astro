@@ -1,0 +1,25 @@
+---
+// A plain list of posts: the date in mono, the title, its one line.
+import type { CollectionEntry } from "astro:content";
+import { postHref, day } from "../posts";
+
+interface Props {
+  posts: CollectionEntry<"posts">[];
+}
+const { posts } = Astro.props;
+---
+
+<ul class="posts">
+  {posts.map((post) => (
+    <li>
+      <time datetime={day(post.data.pubDate)}>{day(post.data.pubDate)}</time>
+      <a href={postHref(post)}>{post.data.title}</a>
+      {post.data.description && (
+        <p>
+          {post.data.description}
+          {post.data.series && <span class="series"> · {post.data.series}</span>}
+        </p>
+      )}
+    </li>
+  ))}
+</ul>

@@ -14,20 +14,14 @@
     "@astrojs/mdx": "^4.3.0",
     "@astrojs/rss": "^4.0.12",
     "@astrojs/sitemap": "^3.6.0",
-    "@astrojs/tailwind": "^6.0.2",
-    "@nanostores/preact": "^0.5.1",
     "astro": "^5.14.0",
     "astro-robots-txt": "^1.0.0",
-    "nanostores": "^0.10.3",
-    "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5"
   },
   "devDependencies": {
-    "@catppuccin/tailwindcss": "^0.1.6",
     "@eslint/compat": "^1.0.1",
     "@eslint/js": "^9.3.0",
     "eslint": "9.x",
-    "eslint-plugin-react": "^7.34.1",
     "globals": "^15.3.0",
     "prettier": "^3.2.5",
     "typescript-eslint": "^8.0.0"

@@ -1,0 +1,72 @@
+---
+// Every page's shell: the head, the bar, the footer and the display-mode scripts.
+// Styles are Specmarshal's surface.css (tokens and components) under site.css (layout).
+import "../styles/surface.css";
+import "../styles/site.css";
+import { LINKS, SITE_DESCRIPTION, SITE_TAGLINE, SITE_TITLE } from "../consts";
+import { THEME_HEAD_SCRIPT, THEME_TOGGLE, THEME_TOGGLE_SCRIPT } from "../specmarshal/theme";
+
+type Nav = "home" | "products" | "blog" | "about";
+interface Props {
+  title?: string;
+  description?: string;
+  nav?: Nav;
+}
+
+const { title, description = SITE_DESCRIPTION, nav } = Astro.props;
+const fullTitle = title ? `${title} · ${SITE_TITLE}` : SITE_TITLE;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const image = new URL("/brand/integratn-mark.svg", Astro.site);
+const destinations: [Nav, string, string][] = [
+  ["products", "Products", "/#products"],
+  ["blog", "Blog", "/blog/"],
+  ["about", "About", "/about/"],
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href={new URL("rss.xml", Astro.site)} />
+    <meta name="generator" content={Astro.generator} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <Fragment set:html={THEME_HEAD_SCRIPT} />
+  </head>
+  <body class="site">
+    <header class="bar">
+      <div class="wrap">
+        <a class="lockup" href="/"><img src="/brand/integratn-mark.svg" alt="" />{SITE_TITLE}</a>
+        <nav aria-label="Site">
+          {destinations.map(([key, label, href]) => (
+            <a href={href} aria-current={key === nav ? "page" : undefined}>{label}</a>
+          ))}
+          <Fragment set:html={THEME_TOGGLE} />
+        </nav>
+      </div>
+    </header>
+    <main class="wrap">
+      <slot />
+    </main>
+    <footer class="foot">
+      <div class="wrap">
+        <span>© {new Date().getFullYear()} {SITE_TITLE}</span>
+        <span>{SITE_TAGLINE.replaceAll(" / ", " · ")}</span>
+        <a href={LINKS.github}>GitHub</a>
+        <a href={LINKS.linkedin}>LinkedIn</a>
+        <a href={LINKS.mastodon}>Mastodon</a>
+        <a href="/rss.xml">RSS</a>
+      </div>
+    </footer>
+    <Fragment set:html={THEME_TOGGLE_SCRIPT} />
+  </body>
+</html>

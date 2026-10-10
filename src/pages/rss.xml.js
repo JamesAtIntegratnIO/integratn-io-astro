@@ -1,16 +1,18 @@
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { postHref, publishedPosts } from '../posts';
 
 export async function GET(context) {
-	const posts = await getCollection('posts');
+	const posts = await publishedPosts();
 	return rss({
 		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,
 		site: context.site,
 		items: posts.map((post) => ({
-			...post.data,
-			link: `/posts/${post.id}/`,
+			title: post.data.title,
+			description: post.data.description,
+			pubDate: post.data.pubDate,
+			link: postHref(post),
 		})),
 	});
 }

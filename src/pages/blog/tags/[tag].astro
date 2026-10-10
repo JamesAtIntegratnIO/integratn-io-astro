@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import PostList from "../../../components/PostList.astro";
+import { groupBy, publishedPosts, titleCase } from "../../../posts";
+
+export async function getStaticPaths() {
+  const groups = groupBy(await publishedPosts(), "tags");
+  return [...groups].map(([tag, posts]) => ({ params: { tag }, props: { posts } }));
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props as { posts: CollectionEntry<"posts">[] };
+---
+
+<Base title={titleCase(tag!)} nav="blog">
+  <div class="page-head">
+    <p class="trail"><a href="/">Integratn</a> / <a href="/blog/">Blog</a> / <a href="/blog/tags/">Tags</a></p>
+    <h1>{titleCase(tag!)}</h1>
+  </div>
+  <section class="band"><PostList posts={posts} /></section>
+</Base>

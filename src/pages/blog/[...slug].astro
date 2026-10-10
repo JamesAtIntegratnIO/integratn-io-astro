@@ -1,0 +1,31 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { day, publishedPosts } from "../../posts";
+
+export async function getStaticPaths() {
+  const posts = await publishedPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props as { post: CollectionEntry<"posts"> };
+const { Content } = await render(post);
+const { title, description, pubDate, updatedDate, series, tags = [] } = post.data;
+---
+
+<Base title={title} description={description} nav="blog">
+  <div class="article">
+    <div class="page-head">
+      <p class="trail"><a href="/">Integratn</a> / <a href="/blog/">Blog</a> / {pubDate.getUTCFullYear()}</p>
+      <h1>{title}</h1>
+      {description && <p>{description}</p>}
+    </div>
+    <p class="meta">
+      <span class="mono">{day(pubDate)}</span>
+      {updatedDate && <span> · updated <span class="mono">{day(updatedDate)}</span></span>}
+      {series && <span> · <a href={`/blog/series/${series}/`}>{series}</a></span>}
+      {tags.length > 0 && <span> · {tags.map((tag, i) => <>{i > 0 && ", "}<a href={`/blog/tags/${tag}/`}>{tag}</a></>)}</span>}
+    </p>
+    <article class="doc"><Content /></article>
+  </div>
+</Base>

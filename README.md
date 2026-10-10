@@ -1,68 +1,52 @@
-# Astro Starter Kit: Blog
+# integratn.io
+
+The Integratn site: a front page for the products (Specmarshal, Bosun) and the
+blog behind it. Astro 5, static output, built on every pull request by the Build
+workflow.
 
 ```sh
-npm create astro@latest -- --template blog
+npm ci
+npm run dev     # http://localhost:4321
+npm run build   # astro check, then astro build into dist/
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/jamesatintegratnio/integratn-io-astro/tree/main/)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/jamesatintegratnio/integratn-io-astro/tree/main/)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/jamesatintegratnio/integratn-io-astro?devcontainer_path=.devcontainer/devcontainer.json)
+## Layout
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+| Path | What |
+|---|---|
+| `src/pages/index.astro` | The front page |
+| `src/pages/products/specmarshal.astro` | Specmarshal's page (coming soon) |
+| `src/pages/blog/` | The blog, its posts, and the tag, series and category indexes |
+| `src/content/posts/` | The posts, as markdown |
+| `src/layouts/Base.astro` | The shell every page shares |
+| `src/styles/site.css` | The site's layout |
+| `src/styles/surface.css` | Specmarshal's stylesheet, generated (below) |
+| `src/specmarshal/theme.ts` | Specmarshal's display-mode toggle, copied (below) |
+| `public/brand/` | The Integratn, Specmarshal and Bosun marks |
 
-![blog](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+Old addresses (`/posts/...`, `/tags/...`, `/series/...`, `/categories/...`)
+redirect to their `/blog/...` pages; the map is in `astro.config.mjs`.
 
-Features:
+## Specmarshal's stylesheet
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+The site wears Specmarshal's design system: its tokens (colours for dark and
+light, type, radius, spacing) and its components (chip, trigger, callout, prose,
+phase strip, display-mode toggle) come from the product's own
+`src/web/surface.css`, compiled by Tailwind against this site's sources so the
+utilities the markup uses are included. `site.css` only arranges them and uses
+nothing but tokens. Neither file is edited by hand.
 
-## 🚀 Project Structure
+To refresh both from a Specmarshal checkout (`$CORE`) after the design system
+changes:
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+```sh
+SITE=$PWD
+cd "$CORE"
+printf '@import "./surface.css";\n@source "%s/src";\n' "$SITE" > src/web/.site-entry.css
+npx tailwindcss -i src/web/.site-entry.css -o "$SITE/src/styles/surface.css" --minify
+rm src/web/.site-entry.css
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+`src/specmarshal/theme.ts` holds `themeToggle()`, `THEME_HEAD_SCRIPT` and
+`THEME_TOGGLE_SCRIPT` from `$CORE/src/web/theme.ts`, as strings. Update the
+commit noted at the top of each file when you regenerate them.

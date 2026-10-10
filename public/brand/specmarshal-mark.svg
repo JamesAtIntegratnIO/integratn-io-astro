@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-128 -128 256 256" role="img" aria-label="Specmarshal">
+  <!-- Generated from one definition of the mark; regenerate with generate.py; geometry in concept.md. -->
+  <defs>
+    <g id="m-half">
+      <polygon points="21,-74 55,-54.88 55,-25.88 21,-45" fill="#f87b4d" stroke="#f87b4d" stroke-width="0.6" stroke-linejoin="round"/>
+      <polygon points="21,-74 21,-45 -29,-16.88 -55,-31.25" fill="#f26a35" stroke="#f26a35" stroke-width="0.6" stroke-linejoin="round"/>
+      <polygon points="-55,-31.25 -29,-16.88 -29,-12.25 -55,2.6" fill="#e3612d" stroke="#e3612d" stroke-width="0.6" stroke-linejoin="round"/>
+      <polygon points="-55,2.6 -29,-12.25 -3.5,2.09 -3.5,31.57" fill="#ee6631" stroke="#ee6631" stroke-width="0.6" stroke-linejoin="round"/>
+    </g>
+    <mask id="m-stars" maskUnits="userSpaceOnUse" x="-80" y="-80" width="160" height="160">
+      <rect x="-80" y="-80" width="160" height="160" fill="#fff"/>
+      <path d="M3.5 -29.5 Q4.3 -15.8 14 -15 Q4.3 -14.2 3.5 -0.5 Q2.7 -14.2 -7 -15 Q2.7 -15.8 3.5 -29.5 Z M-3.5 29.5 Q-4.3 15.8 -14 15 Q-4.3 14.2 -3.5 0.5 Q-2.7 14.2 7 15 Q-2.7 15.8 -3.5 29.5 Z" fill="#000"/>
+    </mask>
+  </defs>
+  <g transform="scale(1.6)" mask="url(#m-stars)">
+    <use href="#m-half"/>
+    <use href="#m-half" transform="rotate(180)"/>
+  </g>
+  <path transform="scale(1.6)" d="M3.5 -29.5 Q4.3 -15.8 14 -15 Q4.3 -14.2 3.5 -0.5 Q2.7 -14.2 -7 -15 Q2.7 -15.8 3.5 -29.5 Z M-3.5 29.5 Q-4.3 15.8 -14 15 Q-4.3 14.2 -3.5 0.5 Q-2.7 14.2 7 15 Q-2.7 15.8 -3.5 29.5 Z" fill="#c94d16" fill-opacity="0.45"/>
+</svg>

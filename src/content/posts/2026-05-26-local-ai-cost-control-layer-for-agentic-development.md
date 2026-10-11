@@ -5,7 +5,7 @@ tags: [ai, ai-agent, local-llm, lm-studio, github-copilot]
 categories: [workflow, devops]
 heroImage: /og/blog/2026-05-26-local-ai-cost-control-layer-for-agentic-development.png
 card: /og/blog/2026-05-26-local-ai-cost-control-layer-for-agentic-development.png
-description: "AI-assisted development is moving from novelty to operating expense."
+description: "An agent builds a Go weather service on a locally hosted model, and what that shows about where cloud AI spend goes in iteration-heavy development."
 ---
 
 ![Local AI Is Becoming the Cost-Control Layer for Agentic Development](/og/blog/2026-05-26-local-ai-cost-control-layer-for-agentic-development.png)

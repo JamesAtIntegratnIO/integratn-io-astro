@@ -57,7 +57,7 @@ Create these files as we go.
 We will use `net/http` + `github.com/gorilla/mux` and `github.com/lib/pq`.  
 **Note:** We will auto-create the table if it does not exist (helpful on first boot).
 
-`api/main.go`
+**`api/main.go`**
 
 ```go
 package main
@@ -254,7 +254,7 @@ Run `go mod tidy` locally if you are hacking outside the container.
 
 We stay consistent with Training 7: compile in a builder, copy just the artifact into a tiny runtime.
 
-`api/Dockerfile`
+**`api/Dockerfile`**
 
 ```dockerfile
 # Build stage
@@ -282,7 +282,7 @@ ENTRYPOINT ["/api"]
 
 ## Postgres with init SQL
 
-Use the official image and seed schema via the built-in init hook. `db/init/01_create_users.sql`
+Use the official image and seed schema via the built-in init hook. **`db/init/01_create_users.sql`**
 
 ```sql
 CREATE TABLE IF NOT EXISTS users (
@@ -294,7 +294,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 ## Compose it together
 
-Two services, one volume, a tiny userland API. The `depends_on` helps with order, and a healthcheck makes local DX nicer. `docker-compose.yml`
+Two services, one volume, a tiny userland API. The `depends_on` helps with order, and a healthcheck makes local DX nicer. **`docker-compose.yml`**
 
 ```yaml
 version: "3.9"

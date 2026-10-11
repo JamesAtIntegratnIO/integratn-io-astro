@@ -19,7 +19,7 @@ type Analytics =
   | { tool: 'plausible'; src?: string; domain: string }
   | { tool: 'goatcounter'; endpoint: string };
 
-export const ANALYTICS: Analytics | null = null;
+export const ANALYTICS: Analytics | null = { tool: 'umami', src: '/c.js', websiteId: '712f4369-49e3-4285-a47a-ed1534441db3' };
 
 /** The hosts whose visits count. Anything else (previews, localhost) loads nothing. */
 export const ANALYTICS_HOSTS = ['integratn.io', 'www.integratn.io'];

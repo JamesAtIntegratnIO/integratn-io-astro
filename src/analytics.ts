@@ -5,6 +5,10 @@
 // banner is needed. The loader only runs on the production hosts, so deploy
 // previews and `astro dev` never add to the numbers.
 //
+// On Cloudflare Pages the tracker is first-party: functions/c.js and
+// functions/api/c.js pass it through to Umami on the homelab, so the value to
+// set is { tool: 'umami', src: '/c.js', websiteId: '<id from Umami>' }.
+//
 // What is counted beyond page views (the same names on bosun.integratn.io):
 //   click     an element marked data-track="<name>", e.g. a product card's button
 //   outbound  any link to another site, with its host and path

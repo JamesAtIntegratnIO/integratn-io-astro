@@ -7,7 +7,9 @@
 //
 // On Cloudflare Pages the tracker is first-party: functions/c.js and
 // functions/api/c.js pass it through to Umami on the homelab, so the value to
-// set is { tool: 'umami', src: '/c.js', websiteId: '<id from Umami>' }.
+// set is { tool: 'umami', src: '/c', websiteId: '<id from Umami>' }. The src is
+// /c, not /c.js: a Pages Function's route is its file name without the
+// extension, so /c.js falls through to the static site and comes back as HTML.
 //
 // What is counted beyond page views (the same names on bosun.integratn.io):
 //   click     an element marked data-track="<name>", e.g. a product card's button
@@ -19,7 +21,7 @@ type Analytics =
   | { tool: 'plausible'; src?: string; domain: string }
   | { tool: 'goatcounter'; endpoint: string };
 
-export const ANALYTICS: Analytics | null = { tool: 'umami', src: '/c.js', websiteId: '712f4369-49e3-4285-a47a-ed1534441db3' };
+export const ANALYTICS: Analytics | null = { tool: 'umami', src: '/c', websiteId: '712f4369-49e3-4285-a47a-ed1534441db3' };
 
 /** The hosts whose visits count. Anything else (previews, localhost) loads nothing. */
 export const ANALYTICS_HOSTS = ['integratn.io', 'www.integratn.io'];

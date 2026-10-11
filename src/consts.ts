@@ -9,5 +9,5 @@ export const LINKS = {
   linkedin: 'https://www.linkedin.com/in/jjdreier/',
   mastodon: 'https://fosstodon.org/@integratnio',
   bosunDocs: 'https://bosun.integratn.io',
-  bosunRepo: 'https://github.com/JamesAtIntegratnIO/bosun',
+  bosunRepo: 'https://github.com/IntegratnIO/bosun',
 };

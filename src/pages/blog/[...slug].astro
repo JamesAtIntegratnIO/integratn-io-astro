@@ -26,6 +26,6 @@ const { title, description, pubDate, updatedDate, series, tags = [] } = post.dat
       {series && <span> · <a href={`/blog/series/${series}/`}>{series}</a></span>}
       {tags.length > 0 && <span> · {tags.map((tag, i) => <>{i > 0 && ", "}<a href={`/blog/tags/${tag}/`}>{tag}</a></>)}</span>}
     </p>
-    <article class="doc"><Content /></article>
+    <article class="doc" data-read-depth><Content /></article>
   </div>
 </Base>

@@ -83,7 +83,7 @@ function tracker(config: Analytics, hosts: string[]) {
   else readDepth();
   function readDepth() {
     const article = document.querySelector('[data-read-depth]');
-    if (!article || !('IntersectionObserver' in window)) return;
+    if (!article) return;
     const marks: [number, Element][] = [];
     for (const depth of [50, 100]) {
       const mark = document.createElement('span');
@@ -91,21 +91,35 @@ function tracker(config: Analytics, hosts: string[]) {
       mark.style.cssText = 'display:block;height:1px;margin:0;';
       if (depth === 100) article.appendChild(mark);
       else {
-        const blocks = article.children;
-        const half = blocks[Math.floor(blocks.length / 2)];
+        // The first block that starts below the middle of the text, by height.
+        const middle = article.getBoundingClientRect().top + article.scrollHeight / 2;
+        const half = Array.from(article.children).find((el) => el.getBoundingClientRect().top >= middle);
         if (!half) continue;
         article.insertBefore(mark, half);
       }
       marks.push([depth, mark]);
     }
-    const seen = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        const found = marks.find(([, m]) => m === entry.target);
-        if (found) track('read', { depth: String(found[0]), page: location.pathname });
-        seen.unobserve(entry.target);
-      }
-    });
-    marks.forEach(([, m]) => seen.observe(m));
+    // A mark counts once it has come into view or gone past the top, so a fast
+    // scroll that jumps over it still counts. Checked on scroll and once now.
+    let pending = marks.slice();
+    function check() {
+      pending = pending.filter(([depth, m]) => {
+        if (m.getBoundingClientRect().top > window.innerHeight) return true;
+        track('read', { depth: String(depth), page: location.pathname });
+        return false;
+      });
+      if (!pending.length) window.removeEventListener('scroll', onScroll);
+    }
+    let queued = false;
+    function onScroll() {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        check();
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    check();
   }
 }

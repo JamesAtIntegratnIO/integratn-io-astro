@@ -1,0 +1,11 @@
+# Cloudflare Pages: the blog moved under /blog. These answer with a real 301, so
+# search engines move each old address's ranking to its new page. The redirects
+# in astro.config.mjs stay as the fallback for any host that ignores this file.
+/posts                /blog/                     301
+/posts/*              /blog/:splat               301
+/tags                 /blog/tags/                301
+/tags/*               /blog/tags/:splat          301
+/series               /blog/series/              301
+/series/*             /blog/series/:splat        301
+/categories           /blog/categories/          301
+/categories/*         /blog/categories/:splat    301

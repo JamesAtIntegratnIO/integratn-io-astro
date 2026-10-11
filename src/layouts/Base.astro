@@ -5,6 +5,7 @@ import "../styles/surface.css";
 import "../styles/site.css";
 import { LINKS, SITE_DESCRIPTION, SITE_TAGLINE, SITE_TITLE } from "../consts";
 import { analyticsScript } from "../analytics";
+import { structuredData } from "../seo";
 import { THEME_HEAD_SCRIPT, THEME_TOGGLE, THEME_TOGGLE_SCRIPT } from "../specmarshal/theme";
 
 type Nav = "home" | "products" | "blog" | "about";
@@ -14,12 +15,17 @@ interface Props {
   nav?: Nav;
   /** The link-preview card, a 1200x630 PNG under public/og/ (made by `npm run og`). */
   image?: string;
+  /** A blog post's dates: the page is shared as an article and described as a BlogPosting. */
+  article?: { published: Date; modified?: Date; tags?: string[] };
+  /** Thin listing pages stay out of search results; their links are still followed. */
+  noindex?: boolean;
 }
 
-const { title, description = SITE_DESCRIPTION, nav, image: card = "/og/integratn.png" } = Astro.props;
+const { title, description = SITE_DESCRIPTION, nav, image: card = "/og/integratn.png", article, noindex } = Astro.props;
 const fullTitle = title ? `${title} · ${SITE_TITLE}` : SITE_TITLE;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const image = new URL(card, Astro.site);
+const structured = structuredData({ url: canonicalURL, title, description, image, article });
 const destinations: [Nav, string, string][] = [
   ["products", "Products", "/#products"],
   ["blog", "Blog", "/blog/"],
@@ -35,10 +41,11 @@ const destinations: [Nav, string, string][] = [
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href={new URL("rss.xml", Astro.site)} />
     <meta name="generator" content={Astro.generator} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? "article" : "website"} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -47,8 +54,12 @@ const destinations: [Nav, string, string][] = [
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={fullTitle} />
+    {article && <meta property="article:published_time" content={article.published.toISOString()} />}
+    {article?.modified && <meta property="article:modified_time" content={article.modified.toISOString()} />}
+    {article?.tags?.map((tag) => <meta property="article:tag" content={tag} />)}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#0a0c10" />
+    <script type="application/ld+json" set:html={JSON.stringify(structured)} />
     <Fragment set:html={THEME_HEAD_SCRIPT} />
     <Fragment set:html={analyticsScript()} />
   </head>

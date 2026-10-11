@@ -1,0 +1,13 @@
+---
+// Cloudflare Pages answers a missing page with this file and a 404 status.
+// Without it, Pages serves the front page with a 200 for every unknown address.
+import Base from "../layouts/Base.astro";
+---
+
+<Base title="Page not found" description="There is no page at this address." noindex>
+  <div class="page-head">
+    <p class="trail"><a href="/">Integratn</a> / 404</p>
+    <h1>Page not found</h1>
+    <p>There is no page at this address. Try the <a href="/">front page</a> or the <a href="/blog/">blog</a>.</p>
+  </div>
+</Base>

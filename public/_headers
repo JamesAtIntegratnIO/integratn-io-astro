@@ -1,0 +1,4 @@
+# Cloudflare Pages. The project's own pages.dev address serves the same site as
+# integratn.io; keep it out of search results so the two never compete.
+https://integratn-io.pages.dev/*
+  X-Robots-Tag: noindex

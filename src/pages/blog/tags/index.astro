@@ -5,7 +5,7 @@ import { groupBy, publishedPosts, titleCase } from "../../../posts";
 const groups = groupBy(await publishedPosts(), "tags");
 ---
 
-<Base title="Tags" nav="blog">
+<Base title="Tags" nav="blog" noindex>
   <div class="page-head"><p class="trail"><a href="/">Integratn</a> / <a href="/blog/">Blog</a> / Tags</p><h1>Tags</h1></div>
   <ul class="terms">
     {[...groups].map(([name, posts]) => (

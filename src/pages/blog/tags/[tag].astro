@@ -13,7 +13,7 @@ const { tag } = Astro.params;
 const { posts } = Astro.props as { posts: CollectionEntry<"posts">[] };
 ---
 
-<Base title={titleCase(tag!)} nav="blog">
+<Base title={titleCase(tag!)} nav="blog" noindex>
   <div class="page-head">
     <p class="trail"><a href="/">Integratn</a> / <a href="/blog/">Blog</a> / <a href="/blog/tags/">Tags</a></p>
     <h1>{titleCase(tag!)}</h1>

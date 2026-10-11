@@ -6,7 +6,12 @@ import robotsTxt from 'astro-robots-txt';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://integratn.io',
-  integrations: [mdx(), sitemap(), robotsTxt()],
+  integrations: [
+    mdx(),
+    // Tag and category listings are noindex (thin, overlapping pages), so the sitemap leaves them out.
+    sitemap({ filter: (page) => !/\/blog\/(tags|categories)\//.test(page) }),
+    robotsTxt(),
+  ],
   // The blog moved under /blog. Every old address still lands on its page.
   redirects: {
     '/posts': '/blog',

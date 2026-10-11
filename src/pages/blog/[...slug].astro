@@ -13,7 +13,7 @@ const { Content } = await render(post);
 const { title, description, pubDate, updatedDate, series, tags = [] } = post.data;
 ---
 
-<Base title={title} description={description} nav="blog">
+<Base title={title} description={description} nav="blog" article={{ published: pubDate, modified: updatedDate, tags }}>
   <div class="article">
     <div class="page-head">
       <p class="trail"><a href="/">Integratn</a> / <a href="/blog/">Blog</a> / {pubDate.getUTCFullYear()}</p>

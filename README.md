@@ -63,7 +63,7 @@ commit noted at the top of each file when you regenerate them.
 
 ## Analytics
 
-`src/analytics.ts` holds the analytics switch. `ANALYTICS` is `null`, so the site loads no tracker and sends nothing. To turn it on, set `ANALYTICS` to one tool (Umami, Plausible or GoatCounter). All three are cookieless, so the site needs no consent banner. Only visits on `ANALYTICS_HOSTS` are counted; deploy previews and `astro dev` are not.
+`src/analytics.ts` holds the analytics switch. While `ANALYTICS` is `null` the site loads no tracker and sends nothing; it is set to Umami, whose tracker the Pages Function `functions/c.js` serves at `/c` (a Function's route is its file name without the extension). To change tools, set `ANALYTICS` to one of Umami, Plausible or GoatCounter. All three are cookieless, so the site needs no consent banner. Only visits on `ANALYTICS_HOSTS` are counted; deploy previews and `astro dev` are not.
 
 Page views come from the tool. The site adds three events:
 

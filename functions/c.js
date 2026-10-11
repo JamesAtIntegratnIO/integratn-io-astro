@@ -4,6 +4,9 @@
 // that match on third-party hosts or on "analytics" and "umami" in a name let it
 // through. Its partner, api/c.js, carries the events back.
 //
+// This file answers at /c: a Function's route drops the extension. The tracker
+// posts to /api/c, which it works out from the address it was loaded from.
+//
 // While the site's analytics switch is off nothing loads this, and a request to
 // it costs one Worker invocation of the free plan's 100,000 a day.
 

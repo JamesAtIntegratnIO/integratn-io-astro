@@ -12,6 +12,8 @@ const postCollection = defineCollection({
 		pubDate: z.coerce.date(),
 		updatedDate: z.coerce.date().optional(),
 		heroImage: z.string().optional(),
+		// The post's own 1200x630 share card under public/og/, made by `npm run og`.
+		card: z.string().optional(),
 		series: z.string().optional(),
 		categories: z.array(z.string()).optional(),
 		draft: z.boolean().optional(),

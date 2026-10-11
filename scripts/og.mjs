@@ -5,7 +5,7 @@
 // nothing. Colours are the design system's dark surface (surface.css): ground,
 // panel, border, text, said, dim. Signal orange appears only inside the marks.
 
-import { mkdirSync, readFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
@@ -80,8 +80,99 @@ function product(name, title, tagline, chip) {
 cards.specmarshal = product('specmarshal', 'Specmarshal', 'From spec to software. Under control.', 'Coming soon');
 cards.bosun = product('bosun', 'Bosun', 'The crew for Argo and Kargo.', null);
 
-mkdirSync(OUT, { recursive: true });
+// Greedy word wrap on an average Inter advance; null when it needs more lines.
+function wrap(text, size, maxWidth, maxLines) {
+  const limit = Math.floor(maxWidth / (size * 0.54));
+  const lines = [];
+  let line = '';
+  for (const word of text.split(/\s+/)) {
+    const next = line ? `${line} ${word}` : word;
+    if (next.length > limit && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = next;
+    }
+  }
+  if (line) lines.push(line);
+  return lines.length <= maxLines ? lines : null;
+}
+
+// The largest of the sizes at which the text fits the lines; the smallest, cut, otherwise.
+function fit(text, sizes, maxWidth, maxLines) {
+  for (const size of sizes) {
+    const lines = wrap(text, size, maxWidth, maxLines);
+    if (lines) return { size, lines };
+  }
+  const size = sizes.at(-1);
+  return { size, lines: wrap(text, size, maxWidth, Infinity).slice(0, maxLines) };
+}
+
+// A blog post: a label, the title, its description, the mark as the art.
+// The title takes the largest size that leaves room for two lines of blurb
+// above the hairline; the blurb takes what is left, three lines at most.
+function post(label, title, blurb) {
+  const top = 236; // the title's first baseline
+  const room = 208; // from there to the last baseline that clears the hairline
+  const blurbSize = 30;
+  const blurbLead = 39;
+  let t;
+  for (const size of [72, 64, 56, 48]) {
+    const lines = wrap(title, size, 740, 4);
+    if (lines && (lines.length - 1) * Math.round(size * 1.12) + blurbLead <= room) {
+      t = { size, lines };
+      break;
+    }
+  }
+  t ??= fit(title, [48], 740, 4);
+  const lead = Math.round(t.size * 1.12);
+  const titleHeight = (t.lines.length - 1) * lead;
+  const blurbLines = wrap(blurb, blurbSize, 740, Infinity);
+  const shown = blurbLines.slice(0, Math.min(3, Math.floor((room - titleHeight) / blurbLead) + 1));
+  if (shown.length < blurbLines.length) shown[shown.length - 1] = shown.at(-1).replace(/[\s,;:.]*$/, '') + '…';
+  const blurbTop = top + titleHeight + 30 + blurbSize;
+  return card(`
+  <text x="80" y="150" font-family="${SANS}" font-size="22" font-weight="600" letter-spacing="3" fill="${DIM}">${esc(label)}</text>
+  ${t.lines.map((line, i) => `<text x="80" y="${top + i * lead}" font-family="${SANS}" font-size="${t.size}" font-weight="700" letter-spacing="-1" fill="${TEXT}">${esc(line)}</text>`).join('\n  ')}
+  ${shown.map((line, i) => `<text x="80" y="${blurbTop + i * blurbLead}" font-family="${SANS}" font-size="${blurbSize}" fill="${SAID}">${esc(line)}</text>`).join('\n  ')}
+  ${mark('integratn', 900, 120, 220)}
+  ${foot(false)}`);
+}
+
+// Every post whose frontmatter names a `card` gets one at that path under
+// public/, titled from the frontmatter. A series post is labelled with its
+// series and part, and titled with what follows the part number.
+function frontmatter(text) {
+  const block = text.match(/^---\n([\s\S]*?)\n---/);
+  const out = {};
+  for (const line of block ? block[1].split('\n') : []) {
+    const kv = line.match(/^(\w+):\s*(.*)$/);
+    if (kv) out[kv[1]] = /^".*"$/.test(kv[2].trim()) ? JSON.parse(kv[2].trim()) : kv[2].trim();
+  }
+  return out;
+}
+
+function* markdownFiles(dir) {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) yield* markdownFiles(path);
+    else if (/\.mdx?$/.test(entry.name)) yield path;
+  }
+}
+
+const titleCase = (s) => s.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+for (const file of markdownFiles(join(ROOT, 'src/content/posts'))) {
+  const { card: path, title, description = '', series, pubDate } = frontmatter(readFileSync(file, 'utf8'));
+  if (!path?.startsWith('/og/')) continue;
+  const day = new Date(pubDate).toISOString().slice(0, 10);
+  const part = series && title.match(/\d+/)?.[0];
+  const label = part ? `${titleCase(series)} / Part ${part} / ${day}`.toUpperCase() : `Blog / ${day}`.toUpperCase();
+  const heading = part ? title.replace(/^.*?\d+\s*[-–—:]\s*/, '') : title;
+  cards[path.slice('/og/'.length).replace(/\.png$/, '')] = post(label, heading, description);
+}
+
 for (const [name, svg] of Object.entries(cards)) {
+  mkdirSync(dirname(join(OUT, `${name}.png`)), { recursive: true });
   await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toFile(join(OUT, `${name}.png`));
   console.log(`public/og/${name}.png`);
 }

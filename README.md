@@ -60,3 +60,15 @@ rm src/web/.site-entry.css
 `src/specmarshal/theme.ts` holds `themeToggle()`, `THEME_HEAD_SCRIPT` and
 `THEME_TOGGLE_SCRIPT` from `$CORE/src/web/theme.ts`, as strings. Update the
 commit noted at the top of each file when you regenerate them.
+
+## Analytics
+
+`src/analytics.ts` holds the analytics switch. `ANALYTICS` is `null`, so the site loads no tracker and sends nothing. To turn it on, set `ANALYTICS` to one tool (Umami, Plausible or GoatCounter). All three are cookieless, so the site needs no consent banner. Only visits on `ANALYTICS_HOSTS` are counted; deploy previews and `astro dev` are not.
+
+Page views come from the tool. The site adds three events:
+
+- `click`: a link marked `data-track="<name>"`, such as a product page's buttons.
+- `outbound`: a link to another site.
+- `read`: a blog post read to its middle (`50`) and to its end (`100`).
+
+To count a new button, give it a `data-track` name.

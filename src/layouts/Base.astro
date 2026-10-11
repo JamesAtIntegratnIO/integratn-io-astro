@@ -4,6 +4,7 @@
 import "../styles/surface.css";
 import "../styles/site.css";
 import { LINKS, SITE_DESCRIPTION, SITE_TAGLINE, SITE_TITLE } from "../consts";
+import { analyticsScript } from "../analytics";
 import { THEME_HEAD_SCRIPT, THEME_TOGGLE, THEME_TOGGLE_SCRIPT } from "../specmarshal/theme";
 
 type Nav = "home" | "products" | "blog" | "about";
@@ -49,6 +50,7 @@ const destinations: [Nav, string, string][] = [
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#0a0c10" />
     <Fragment set:html={THEME_HEAD_SCRIPT} />
+    <Fragment set:html={analyticsScript()} />
   </head>
   <body class="site">
     <header class="bar">

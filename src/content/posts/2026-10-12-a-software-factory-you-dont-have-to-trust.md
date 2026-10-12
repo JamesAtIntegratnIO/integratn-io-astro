@@ -8,7 +8,6 @@ card: /og/blog/2026-10-12-a-software-factory-you-dont-have-to-trust.png
 description: "For the CTO who wants agents building overnight but won't let them run unchecked: how Specmarshal keeps people in charge of what gets built, what counts as done, and what ships."
 ---
 
-![A Software Factory You Don't Have to Trust](/og/blog/2026-10-12-a-software-factory-you-dont-have-to-trust.png)
 
 So you're a CTO. Or you run engineering, or you're the person who gets asked "what's our AI strategy" in every leadership meeting. You've watched the demos. You've seen an agent knock out a feature in twenty minutes. You've probably also seen one confidently tell you the tests pass when it never ran them.
 

@@ -8,7 +8,6 @@ card: /og/blog/2026-05-28-git-worktrees-guardrails-for-agentic-development.png
 description: "The move is not manually juggling worktrees all day. The move is letting your agentic tools create isolated lanes, then understanding enough Git to know what they are doing."
 ---
 
-![Git Worktrees Are the Guardrails for Agentic Development](/og/blog/2026-05-28-git-worktrees-guardrails-for-agentic-development.png)
 
 Agentic development changes the shape of how we work.
 

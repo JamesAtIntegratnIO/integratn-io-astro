@@ -43,6 +43,12 @@ You don't have to write all of that by hand. A planning session grills the idea 
 
 A planned spec comes out as `needs-triage`: an agent plans it, a person marks it ready, and nothing runs until somebody on your team says so.
 
+<figure class="shot">
+  <img class="shot-dark" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/spec-ready-dark.webp" alt="A spec page in Specmarshal's web view, marked Not ready, with a Mark ready button above its two tickets" width="1400" height="700" loading="lazy">
+  <img class="shot-light" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/spec-ready-light.webp" alt="" width="1400" height="700" loading="lazy">
+  <figcaption>A freshly planned spec, waiting on a person to mark it ready. The screenshots in this post are Specmarshal's web view with sample data.</figcaption>
+</figure>
+
 On GitHub, ready is a label, and a spec issue is ready while it carries `ready-for-agent`. If anyone edits the body of a spec or ticket after the label went on, it stops being ready:
 
 > the issue's body changed after it was made ready; apply ready-for-agent again to take the new text
@@ -63,7 +69,19 @@ The agent doesn't get to rewrite the gate either. The Makefile decides what `mak
 
 Green tests only prove the repo still works, not that the ticket got done, which is why a green gate sends the ticket to a second agent, the **reviewer**, which reads the ticket and the diff, changes nothing, and says whether each acceptance criterion is met. The review is the only thing in the whole system that can mark a ticket resolved.
 
+<figure class="shot">
+  <img class="shot-dark" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/run-phases-dark.webp" alt="A run's page showing its phases: getting ready, plan review, each ticket (build, gate, review, tidy), then spec review" width="1400" height="314" loading="lazy">
+  <img class="shot-light" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/run-phases-light.webp" alt="" width="1400" height="314" loading="lazy">
+  <figcaption>A run partway through a ticket. The builder is done, the orchestrator ran the gate, and the reviewer has it now.</figcaption>
+</figure>
+
 Once every ticket is closed, the reviewer reads the spec's scenarios against the whole feature branch, because a pile of finished slices can still miss the feature. If every scenario holds, the run opens a pull request. If any don't, it opens a **draft** pull request that names each unmet scenario and why, and waits for a person.
+
+<figure class="shot">
+  <img class="shot-dark" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/spec-short-dark.webp" alt="A spec page with both tickets resolved but marked Short of 1 requirement, naming the unmet requirement and why" width="1400" height="971" loading="lazy">
+  <img class="shot-light" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/spec-short-light.webp" alt="" width="1400" height="971" loading="lazy">
+  <figcaption>Both tickets resolved, and the spec review still found a requirement unmet. The page says which one and why.</figcaption>
+</figure>
 
 I've had this happen on my own work. Specmarshal builds itself, so its features are specs and tickets like anyone else's. One of mine ran overnight, and even with every ticket closed green and reviewed, it came back unsatisfied with 2 of 32 scenarios unmet. The draft PR said exactly which two, and I'd much rather read that in the morning than find it in production.
 
@@ -99,6 +117,12 @@ The third is a conflicting merge, when two tickets worked in parallel touched th
 
 When a cap runs out, the ticket is **parked**: set aside with a note saying which kind of trouble got it there, and the run stops spending money on that ticket while it keeps going on the rest.
 
+<figure class="shot">
+  <img class="shot-dark" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/ticket-parked-dark.webp" alt="A spec page with one ticket marked parked, attempts spent" width="1400" height="565" loading="lazy">
+  <img class="shot-light" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/ticket-parked-light.webp" alt="" width="1400" height="565" loading="lazy">
+  <figcaption>A ticket parked after its attempts ran out, with the kind of trouble that parked it.</figcaption>
+</figure>
+
 Then there are limits on the whole run. The iteration budget is 50 phase invocations by default. The dollar ceiling, `spend-ceiling`, is $30 by default and counts what your model provider bills per token, and once a run reaches it nothing new starts. If Specmarshal can't tell what something cost, it treats the ceiling as reached instead of assuming you're under it.
 
 The service polls your projects for specs marked ready. A spec that ends badly (out of budget, deadlocked, unsatisfied, whatever) settles to `parked` and stays there. The next poll doesn't pick it back up, because re-running a spec that couldn't finish would just burn budget on the same failure. A person has to look at it and mark it ready again.
@@ -106,6 +130,12 @@ The service polls your projects for specs marked ready. A spec that ends badly (
 ## You can see all of it
 
 The service has a web view where every page leads with what needs a person. The index opens with that, followed by a section per project, down to a page for each spec, run and ticket.
+
+<figure class="shot">
+  <img class="shot-dark" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/needs-a-person-dark.webp" alt="The What needs a person list, with parked tickets, a wedged spec, a spec held by its review and a failed run" width="1400" height="654" loading="lazy">
+  <img class="shot-light" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/needs-a-person-light.webp" alt="" width="1400" height="654" loading="lazy">
+  <figcaption>The top of the index. Each line says what's stuck, where, and why.</figcaption>
+</figure>
 
 Spend sits next to the work it bought and the limit it counts against, and a number Specmarshal couldn't read is shown as unknown rather than zero. Anyone with the link can read. Changing anything (releasing a parked ticket, holding a spec, leaving an operator note) takes operator access, and anything you can't undo asks first and tells you what it costs.
 

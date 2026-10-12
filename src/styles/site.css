@@ -158,3 +158,15 @@ section.band > .label { margin-bottom: 18px; }
 .post-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 32px 0 0; padding-top: 20px; border-top: 1px solid var(--border); }
 .post-tags .chip { text-decoration: none; color: var(--dim); }
 .post-tags .chip:hover { color: var(--text); border-color: var(--dim); }
+
+/* Product screenshots in posts: one image per theme, swapped with the site's theme. */
+.doc figure.shot { margin: 1.75rem 0; }
+.doc figure.shot img { display: block; width: 100%; border: 1px solid var(--border); border-radius: 8px; }
+.doc figure.shot figcaption { margin-top: .5rem; font-size: var(--floor); color: var(--dim); }
+.doc figure.shot .shot-light { display: none; }
+[data-theme="light"] .doc figure.shot .shot-dark { display: none; }
+[data-theme="light"] .doc figure.shot .shot-light { display: block; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .doc figure.shot .shot-dark { display: none; }
+  :root:not([data-theme]) .doc figure.shot .shot-light { display: block; }
+}

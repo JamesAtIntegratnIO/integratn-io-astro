@@ -85,11 +85,11 @@ Specmarshal doesn't host a model, and it doesn't want to. Its job is orchestrati
 
 The agent Specmarshal drives is Pi, and you point it at a provider: Anthropic, OpenAI, or `local`. Local means any OpenAI-compatible server you run yourself, like vLLM, Ollama or llama.cpp, in your own cloud or on the same cluster. Prompts, and the code in them, go to the endpoint you picked, under your own account and at your provider's price. If it's your own server, the model calls stay with you and there's no per-token bill at all.
 
-Your provider key sits in a Kubernetes Secret on your cluster. The run records (every transcript, every diff, what the gate printed, what it all cost) go into a Postgres database and an S3-compatible bucket that you point it at. None of it gets sent to us.
+Your provider key sits in a Kubernetes Secret on your cluster. The run records (every transcript, every diff, what the gate printed, what it all cost) go into a Postgres database and an S3-compatible bucket that you point it at.
 
 The pods that run agent code are fenced off from the rest of your cluster too. Before a run claims a ticket, Specmarshal puts a NetworkPolicy on those pods that blocks other pods, Services, the nodes and your cloud's metadata endpoint. If your model server lives inside the cluster, you add one policy that lets the agent pods reach it.
 
-The one thing that calls home is the license check. Once an hour the service asks our license server whether your key is still good. The agent pods never make that call. If the check can't get through, nothing changes for 72 hours. After that Specmarshal drops back to the free tier, which still runs the whole loop, just on one project and one ticket at a time.
+Right now the only thing that calls home is the license check. Once an hour the service asks our license server whether your key is still good. The agent pods never make that call. If the check can't get through, nothing changes for 72 hours. After that Specmarshal drops back to the free tier, which still runs the whole loop, just on one project and one ticket at a time.
 
 ## It knows when to stop
 

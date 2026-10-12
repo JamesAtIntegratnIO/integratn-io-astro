@@ -12,7 +12,7 @@ If you run engineering, you've probably been asked "what's our AI strategy" in m
 
 What you want is the speed: the "software factory" idea, where work goes in one end and branches come out the other while your team sleeps. What holds you back is that you don't trust it to run on its own, and you're right not to.
 
-I built [Specmarshal](/products/specmarshal) around that distrust. In Specmarshal the agent writes the code and that's the only decision it gets to make, while your tests, a separate reviewer and the people on your team make every other call.
+I built [Specmarshal](/go/specmarshal) around that distrust. In Specmarshal the agent writes the code and that's the only decision it gets to make, while your tests, a separate reviewer and the people on your team make every other call.
 
 ## What actually goes wrong
 
@@ -164,7 +164,7 @@ If you want to kick the tires, start small. Pick one small spec on a repo you'd 
 
 ## Where can I get it?
 
-Not yet. Specmarshal is in private alpha and there's no signup, but you can watch the [product page](/products/specmarshal) or this blog, where I'll keep posting about how it's built.
+Not yet. Specmarshal is in private alpha and there's no signup, but you can watch the [product page](/go/specmarshal) or this blog, where I'll keep posting about how it's built.
 
 ## TLDR
 

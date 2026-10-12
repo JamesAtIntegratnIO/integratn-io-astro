@@ -18,13 +18,13 @@ But you don't trust it to run on its own.
 
 Good. You shouldn't.
 
-That distrust is the right instinct, and I built [Specmarshal](/products/specmarshal) around it. This post is about what that actually means in practice. Not "AI you can trust." The opposite. A factory where trust isn't required, because every decision that matters is made by your tests, by a separate reviewer, or by a person.
+I built [Specmarshal](/products/specmarshal) around that distrust. Every decision that matters gets made by your tests, by a separate reviewer, or by a person. Never by the agent doing the work. This post walks through what that looks like in practice.
 
-## The problem isn't that agents write bad code
+## So What Actually Goes Wrong?
 
-They write pretty good code. Sometimes great code. The problem is everything around the code.
+Agents write pretty good code. Sometimes great code. What goes wrong is everything around it.
 
-An agent finishes and says it's done. Is it? Who checked? The agent did. That's the whole issue. The thing doing the work is also the thing grading the work, and it's very motivated to give itself an A.
+An agent finishes and says it's done. Is it? Who checked? The agent did. The thing doing the work is also grading the work, and it's very motivated to give itself an A.
 
 Then there's drift. Long agent sessions get worse as they go. A model writes its best code early in a session and noticeably worse code later, once the context window is full of everything it tried and abandoned. Leave one running all night on a big feature and you come back to something that started smart and ended confused.
 
@@ -48,13 +48,13 @@ Small is on purpose. A ticket has to fit inside one agent's context window, in t
 
 You don't have to write all of that by hand. `specmarshal plan` starts a planning session that grills the idea first, pushing back on it the way a reviewer would, then drafts the spec and tickets and shows you each one to approve, edit or reject.
 
-But here's the part a CTO should care about. A planned spec is written as `needs-triage`. An agent plans it. **A person marks it ready.** Nothing runs until somebody on your team says so.
+A planned spec is written as `needs-triage`. An agent plans it. **A person marks it ready.** Nothing runs until somebody on your team says so.
 
 On GitHub that's a label. A spec issue is ready while it carries `ready-for-agent` and not ready without it. And if anyone edits the body of a spec or ticket after the label went on, it stops being ready:
 
 > the issue's body changed after it was made ready; apply ready-for-agent again to take the new text
 
-So the text that gets worked is exactly the text a person approved. Not something that got changed later.
+So the text that gets worked is exactly the text a person approved.
 
 Some work just shouldn't go to an agent. Production access, a live test against staging, a conversation with a vendor. Those tickets get `ready-for-human`. A person does them and closes them with a note on what they did, and that note gets handed to every ticket that was waiting on it. The agent picks up from the human's work instead of guessing at it.
 
@@ -62,19 +62,17 @@ There's one more check before any code gets written. The lead architect runs a *
 
 ## The agent doesn't get a vote on done
 
-This is the big one. It's the line the whole design is drawn around.
-
 When an agent finishes a ticket, its report might say "complete." Specmarshal treats that as information about the agent. Not about the code.
 
 What actually decides is your **gate**: your own test suite, `make verify`. And Specmarshal runs it itself, after the agent process has exited. It checks out the delivered commit into a fresh tree the agent never touched. Before it runs anything it swaps the `Makefile` and Specmarshal's own config back in from the feature branch.
 
-That last bit matters more than it sounds. An agent that can't get the tests to pass has a very easy way out, which is to edit the tests. Specmarshal won't grade an attempt through its own rewrite of the exam.
+An agent that can't get the tests to pass has a very easy way out, which is to edit the tests. Specmarshal won't grade an attempt through its own rewrite of the exam.
 
 Green tests still aren't done though. Green proves the repo still works. It doesn't prove the ticket got done. So a green gate only gets the ticket to a second agent, the **reviewer**, with a different job: read the ticket, read the diff, change nothing, and say whether each acceptance criterion is actually met. The review is the only thing in the whole system that can mark a ticket resolved.
 
 Then once every ticket is closed, there's one more question. Do the slices actually add up to the spec? The reviewer reads the spec's scenarios against the whole feature branch. If they all hold, the run opens a pull request. If they don't, it opens a **draft** pull request instead, names each unmet scenario and why, and waits for a person.
 
-I've had this happen on my own work. Specmarshal builds itself, its own features are specs and tickets like anyone else's. One of mine ran overnight, every ticket closed green and reviewed, and it still came back unsatisfied with 2 of 32 scenarios unmet. The draft PR said exactly which two. That's the system doing its job. I'd much rather read that in the morning than find it in production.
+I've had this happen on my own work. Specmarshal builds itself, its own features are specs and tickets like anyone else's. One of mine ran overnight, every ticket closed green and reviewed, and it still came back unsatisfied with 2 of 32 scenarios unmet. The draft PR said exactly which two. I'd much rather read that in the morning than find it in production.
 
 ## It can't touch what it can break
 
@@ -82,7 +80,7 @@ Every iteration runs in a sandbox of its own. The worker clones your project int
 
 A run never commits to the branch you started from. Each ticket gets its own branch. Those merge into a feature branch for the spec. The feature branch becomes a pull request against your base branch. And then it stops.
 
-Specmarshal does not merge. It does not deploy. It hands you reviewed branches and a pull request, and **landing it is your decision**. Your existing review process, your CODEOWNERS, your CI, all of that still applies. The factory feeds your pipeline. It doesn't replace it.
+Specmarshal does not merge. It does not deploy. It hands you reviewed branches and a pull request, and **landing it is your decision**. Your existing review process, your CODEOWNERS and your CI all still apply.
 
 One more thing your security people will ask about. When Specmarshal parks a ticket on GitHub it posts a comment, and someone usually answers there. Those comments show up on Specmarshal's own pages so you can read the conversation. But a comment is never handed to an agent. Anyone who can reach the issue can write one, and an agent would read it as though it were the ticket. So that path just doesn't exist. If a person needs to tell the next attempt something, there's an **operator note** for that, and it goes through the same capability every other write does.
 
@@ -96,7 +94,7 @@ Specmarshal counts three different kinds of trouble on each ticket, separately:
 - **A refused review.** Tests pass but the reviewer won't tick the criteria. That's a different problem, so it gets its own cap.
 - **A conflicting merge.** Two tickets worked in parallel touched the same files. A lead architect phase tries to resolve it, the resolution gets gated again, and then re-read against every earlier ticket whose files it touched. A merge that quietly broke something already done is refused, however green it is. Own cap again.
 
-When a cap runs out, the ticket is **parked**. Set aside, with a note saying which of those three got it there, and the run carries on with the rest. Parking isn't failure. It's the run declining to keep spending money on something that needs a human.
+When a cap runs out, the ticket is **parked**. Set aside, with a note saying which of those three got it there, and the run carries on with the rest. The run stops spending money on something that needs a human, and keeps going on everything else.
 
 Then there are run-wide limits. An iteration budget, 50 phase invocations by default. And a dollar ceiling, `spend-ceiling`, $30 by default, counting what your model provider bills per token. Once the run reaches it, nothing new starts. And if Specmarshal can't tell what something cost, it treats the ceiling as reached rather than guessing you're fine.
 
@@ -108,15 +106,15 @@ The service serves a web surface, and the whole page is built around one questio
 
 Spend sits next to the work it bought and the limit it counts against. A number Specmarshal couldn't read says so instead of showing up as zero. Reading is open. Anything that changes something, like releasing a parked ticket, holding a spec or leaving an operator note, needs the operator capability, and the irreversible stuff confirms first and tells you what it costs.
 
-And every run leaves a full record behind: the event stream, each iteration's verbatim transcript, what the gate printed, what everything cost, and the commit it started from. When someone asks "why did it do that?" you have the actual answer. Not a summary of the answer.
+And every run leaves a full record behind: the event stream, each iteration's verbatim transcript, what the gate printed, what everything cost, and the commit it started from. When someone asks "why did it do that?" you can go read the actual answer.
 
-The idea is pretty simple. You come in in the morning and within one screen you know what got delivered, what needs you, and what it cost.
+You come in in the morning and within one screen you know what got delivered, what needs you, and what it cost.
 
 ## What this changes for your team
 
-Here's the honest part. Specmarshal is only as good as your gate.
+Specmarshal is only as good as your gate.
 
-It won't judge your code beyond your tests and the acceptance criteria. If `make verify` is weak, a run will happily deliver code that passes a weak `make verify`. So the first investment isn't in agents. It's in your test suite and in writing tickets with acceptance criteria someone could actually check. Which, lets be real, is stuff your team should be doing anyway.
+It won't judge your code beyond your tests and the acceptance criteria. If `make verify` is weak, a run will happily deliver code that passes a weak `make verify`. So put the first investment into your test suite, and into writing tickets with acceptance criteria someone could actually check. Which, lets be real, is stuff your team should be doing anyway.
 
 What changes is where your people spend their time. Less typing out the slice. More of:
 
@@ -133,7 +131,7 @@ Not yet. Specmarshal is in private alpha. There's nothing to sign up for right n
 
 ## TLDR
 
-You don't have to trust the agent. That's the point.
+You don't have to trust the agent.
 
 - **People decide what gets built.** Specs and tickets, planned by an agent, marked ready by a person. Change the text and it isn't ready anymore.
 - **Your tests decide what works.** The gate runs after the agent is gone, on a tree it never touched, with the Makefile swapped back in.

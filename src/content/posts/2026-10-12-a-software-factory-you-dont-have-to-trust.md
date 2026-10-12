@@ -65,15 +65,15 @@ When an agent finishes a ticket, its report might say "complete." Specmarshal tr
 
 The check is your **gate**, your own test suite run with one command, `make verify`. Specmarshal runs it itself after the agent is gone, on a fresh checkout of whatever the agent committed.
 
+<figure class="shot">
+  <img class="shot-dark" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/one-ticket-dark.webp" alt="One ticket through the loop: frontier, claim, compose, iteration, ticket branch, then the gate, which leads to a review if green, a repair if red, or parking once the cap is spent" width="1400" height="539" loading="lazy">
+  <img class="shot-light" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/one-ticket-light.webp" alt="" width="1400" height="539" loading="lazy">
+  <figcaption>One ticket, end to end. The gate is the orchestrator's own check, and only the review can resolve the ticket.</figcaption>
+</figure>
+
 The agent doesn't get to rewrite the gate either. The Makefile decides what `make verify` runs, so before anything runs, the Makefile and Specmarshal's own settings get put back to the versions on the feature branch. An agent that changed them gets graded on the old ones anyway, and the run summary says it touched them, so whoever reads that diff knows to look hard at it. That rule came from a real run where an agent rewrote the Makefile partway through a ticket. It turned out to be a legit fix that time, but it still wasn't the call of the thing being graded.
 
 Green tests only prove the repo still works, not that the ticket got done, which is why a green gate sends the ticket to a second agent, the **reviewer**, which reads the ticket and the diff, changes nothing, and says whether each acceptance criterion is met. The review is the only thing in the whole system that can mark a ticket resolved.
-
-<figure class="shot">
-  <img class="shot-dark" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/run-phases-dark.webp" alt="A run's page showing its phases: getting ready, plan review, each ticket (build, gate, review, tidy), then spec review" width="1400" height="314" loading="lazy">
-  <img class="shot-light" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/run-phases-light.webp" alt="" width="1400" height="314" loading="lazy">
-  <figcaption>A run partway through a ticket. The builder is done, the orchestrator ran the gate, and the reviewer has it now.</figcaption>
-</figure>
 
 Once every ticket is closed, the reviewer reads the spec's scenarios against the whole feature branch, because a pile of finished slices can still miss the feature. If every scenario holds, the run opens a pull request. If any don't, it opens a **draft** pull request that names each unmet scenario and why, and waits for a person.
 
@@ -90,6 +90,12 @@ I've had this happen on my own work. Specmarshal builds itself, so its features 
 Specmarshal runs as a service on your Kubernetes cluster, installed with a Helm chart. Every iteration gets a Job of its own, which is one pod running your project's sandbox image that gets thrown away when the iteration ends. The gate runs in a separate pod, and the code goes in and comes back out as a git bundle, never as a mounted volume or a remote the agent can push to.
 
 A run never commits to the branch you started from. Each ticket gets its own branch, those merge into a feature branch for the spec, and the feature branch becomes a pull request against your base branch, at which point the run stops.
+
+<figure class="shot">
+  <img class="shot-dark" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/where-work-ends-up-dark.webp" alt="Branch diagram: the base branch is never moved, a feature branch is cut from it, each ticket gets its own branch that merges back after a green gate and a satisfied review, and the feature branch becomes a pull request" width="1400" height="396" loading="lazy">
+  <img class="shot-light" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/where-work-ends-up-light.webp" alt="" width="1400" height="396" loading="lazy">
+  <figcaption>Where the work ends up. Your base branch only changes when you merge the pull request.</figcaption>
+</figure>
 
 Specmarshal doesn't merge and it doesn't deploy. It hands you reviewed branches and a pull request, and landing it is your call, with your review process, your CODEOWNERS and your CI all still applying.
 

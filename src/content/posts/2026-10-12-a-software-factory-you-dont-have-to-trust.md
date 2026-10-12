@@ -29,6 +29,7 @@ So "I don't trust it to run on its own" usually breaks down like this:
 - I don't trust it to decide what to build.
 - I don't trust it to decide when it's done.
 - I don't trust it near anything it can break.
+- I don't know where my code goes once it's handed to a model.
 - I don't trust it to know when to stop.
 - I need to see what it did without reading ten thousand lines of logs.
 
@@ -77,6 +78,18 @@ A run never commits to the branch you started from. Each ticket gets its own bra
 Specmarshal doesn't merge and it doesn't deploy. It hands you reviewed branches and a pull request, and landing it is your call. Your review process, your CODEOWNERS and your CI all still apply.
 
 Your security people will ask about prompt injection. When Specmarshal parks a ticket on GitHub it posts a comment, and someone usually answers there. Those comments show up on Specmarshal's own pages so you can follow the conversation, but they're never handed to an agent. Anyone who can reach the issue can write a comment, and an agent would read it as though it were the ticket. If a person needs to tell the next attempt something, that's what an **operator note** is for, and writing one takes the same operator access as every other change.
+
+## You pick the model, and where your code goes
+
+Specmarshal doesn't host a model, and it doesn't want to. Its job is orchestrating the agents. Which model they run on, and whose servers your code travels to, is your call.
+
+The agent Specmarshal drives is Pi, and you point it at a provider: Anthropic, OpenAI, or `local`. Local means any OpenAI-compatible server you run yourself, like vLLM, Ollama or llama.cpp, in your own cloud or on the same cluster. Prompts, and the code in them, go to the endpoint you picked, under your own account and at your provider's price. If it's your own server, the model calls stay with you and there's no per-token bill at all.
+
+Your provider key sits in a Kubernetes Secret on your cluster. The run records (every transcript, every diff, what the gate printed, what it all cost) go into a Postgres database and an S3-compatible bucket that you point it at. None of it gets sent to us.
+
+The pods that run agent code are fenced off from the rest of your cluster too. Before a run claims a ticket, Specmarshal puts a NetworkPolicy on those pods that blocks other pods, Services, the nodes and your cloud's metadata endpoint. If your model server lives inside the cluster, you add one policy that lets the agent pods reach it.
+
+The one thing that calls home is the license check. Once an hour the service asks our license server whether your key is still good. The agent pods never make that call. If the check can't get through, nothing changes for 72 hours. After that Specmarshal drops back to the free tier, which still runs the whole loop, just on one project and one ticket at a time.
 
 ## It knows when to stop
 
@@ -129,6 +142,7 @@ You don't have to trust the agent.
 - Your tests decide what works. The gate runs after the agent is gone, on a fresh checkout, with the Makefile put back.
 - A separate reviewer decides what's done, ticket by ticket and then the whole spec against its scenarios. If it falls short you get a draft PR.
 - Nothing touches your repo. Each ticket gets a fresh pod on your cluster, and you get a pull request to merge or not.
+- You pick the model: Anthropic, OpenAI or your own server. Keys and run records stay on your cluster.
 - It stops itself, with caps per ticket, a budget and a dollar ceiling per run, and parked work that waits for a person.
 - You can see what needs you, what it spent and a full record of every run.
 

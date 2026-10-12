@@ -141,3 +141,15 @@ section.band > .label { margin-bottom: 18px; }
   .bar nav a { padding: 6px 6px; }
   .lockup { font-size: 17px; }
 }
+
+/* Code in posts. Inline code sits on the panel with a hairline, because the well is
+   the ground's own colour in light mode and vanishes there. Blocks keep the
+   product's well and border; their highlighting is Shiki's two GitHub themes,
+   switched with the display mode (dark unless light is pinned or the platform asks). */
+.doc :not(pre) > code { background: var(--panel); border: 1px solid var(--border); padding: 0 .3em; font-size: .85em; }
+.doc pre.astro-code { background: var(--panel) !important; }
+.doc .astro-code, .doc .astro-code span { color: var(--shiki-dark); }
+[data-theme="light"] .doc .astro-code, [data-theme="light"] .doc .astro-code span { color: var(--shiki-light); }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .doc .astro-code, :root:not([data-theme]) .doc .astro-code span { color: var(--shiki-light); }
+}

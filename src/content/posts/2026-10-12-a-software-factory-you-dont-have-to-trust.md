@@ -40,7 +40,7 @@ Specmarshal works from a **spec**: one feature, written down, with scenarios tha
 
 Tickets are small on purpose. A ticket has to fit in the good part of one agent's context window. Every ticket gets a brand new agent process that's started, told one thing, and thrown away, and no conversation carries over from one ticket to the next. That's how you stay out of the dumb zone.
 
-You don't have to write all of that by hand. `specmarshal plan` starts a planning session that grills the idea first, pushing back on it like a reviewer would. Then it drafts the spec and tickets and shows you each one to approve, edit or reject.
+You don't have to write all of that by hand. A planning session grills the idea first, pushing back on it like a reviewer would. Then it drafts the spec and tickets and shows you each one to approve, edit or reject.
 
 A planned spec comes out as `needs-triage`. An agent plans it and a person marks it ready. Nothing runs until somebody on your team says so.
 
@@ -70,7 +70,7 @@ I've had this happen on my own work. Specmarshal builds itself, so its features 
 
 ## It can't touch what it can break
 
-Every iteration runs in a sandbox of its own. The worker clones your project into a workspace inside the container and works there. Your repository can't be reached from in there, and neither can your home directory or anybody's personal agent config.
+Specmarshal runs as a service on your Kubernetes cluster, installed with a Helm chart. Every iteration gets a Job of its own: one pod running your project's sandbox image, thrown away when the iteration ends. The gate runs in a separate pod. The code goes in and comes back out as a git bundle, never as a mounted volume or a remote the agent can push to.
 
 A run never commits to the branch you started from. Each ticket gets its own branch, those merge into a feature branch for the spec, and the feature branch becomes a pull request against your base branch. Then the run stops.
 
@@ -90,7 +90,7 @@ When a cap runs out, the ticket is **parked**: set aside with a note saying whic
 
 Then there are limits on the whole run. The iteration budget is 50 phase invocations by default. The dollar ceiling, `spend-ceiling`, is $30 by default and counts what your model provider bills per token. Once a run reaches it, nothing new starts. If Specmarshal can't tell what something cost, it treats the ceiling as reached instead of assuming you're under it.
 
-When Specmarshal runs as a service, a spec that ends badly (out of budget, deadlocked, unsatisfied, whatever) settles to `parked` and stays there. The next poll doesn't pick it back up, because re-running a spec that couldn't finish would just burn budget on the same failure. A person has to look at it and mark it ready again.
+The service polls your projects for specs marked ready. A spec that ends badly (out of budget, deadlocked, unsatisfied, whatever) settles to `parked` and stays there. The next poll doesn't pick it back up, because re-running a spec that couldn't finish would just burn budget on the same failure. A person has to look at it and mark it ready again.
 
 ## You can see all of it
 
@@ -115,7 +115,7 @@ Your people spend less time typing out the slice and more time on:
 - Reading branches and pull requests one ticket at a time, since each ticket's branch stays pushed after it merges.
 - Picking up parked tickets, and the `ready-for-human` ones that were never going to an agent.
 
-If you want to kick the tires, start small. `specmarshal status` reads a spec and shows every ticket, its state, and what would start right now. No agent runs and it costs nothing. Then run one small spec on something you'd be happy to throw away. Point it at the spec in the evening, read the branches in the morning, and see if you agree with the reviewer.
+If you want to kick the tires, start small. Pick one small spec on a repo you'd be happy to throw away. Mark it ready in the evening, read the branches in the morning, and see if you agree with the reviewer.
 
 ## Where can I get it?
 
@@ -128,7 +128,7 @@ You don't have to trust the agent.
 - People decide what gets built. An agent plans the spec and tickets, a person marks them ready, and editing the text takes the ready mark off.
 - Your tests decide what works. The gate runs after the agent is gone, on a fresh checkout, with the Makefile put back.
 - A separate reviewer decides what's done, ticket by ticket and then the whole spec against its scenarios. If it falls short you get a draft PR.
-- Nothing touches your repo. Each ticket gets a fresh process in a sandbox, and you get a pull request to merge or not.
+- Nothing touches your repo. Each ticket gets a fresh pod on your cluster, and you get a pull request to merge or not.
 - It stops itself, with caps per ticket, a budget and a dollar ceiling per run, and parked work that waits for a person.
 - You can see what needs you, what it spent and a full record of every run.
 

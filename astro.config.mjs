@@ -12,6 +12,10 @@ export default defineConfig({
     sitemap({ filter: (page) => !/\/blog\/(tags|categories)\//.test(page) }),
     robotsTxt(),
   ],
+  // Code blocks carry both GitHub themes as variables; site.css picks one by display mode.
+  markdown: {
+    shikiConfig: { themes: { light: 'github-light', dark: 'github-dark' }, defaultColor: false },
+  },
   // The blog moved under /blog. Every old address still lands on its page.
   redirects: {
     '/posts': '/blog',

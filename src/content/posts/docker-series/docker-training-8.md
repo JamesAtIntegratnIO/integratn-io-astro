@@ -9,7 +9,6 @@ card: /og/blog/docker-training-8.png
 description: "A small Go CRUD API and a Postgres database in two containers, wired together with Docker Compose, with a multi-stage build and configuration by environment variables."
 ---
 
-![Docker Training 8 - From Lean Images to Real Services](/og/blog/docker-training-8.png)
 
 Last time we trimmed our image from chunky to chonky-less. Love that for us.  
 Now lets put that discipline to work and build something you can actually use: a **CRUD API** backed by **Postgres**. Two containers, clean networking, multi-stage builds, small artifacts. No fluff.

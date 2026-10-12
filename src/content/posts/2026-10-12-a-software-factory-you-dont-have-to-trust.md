@@ -1,0 +1,181 @@
+---
+title: "A Software Factory You Don't Have to Trust"
+pubDate: 2026-10-12T13:00:00.000Z
+tags: [ai, ai-agent, agentic-development, specmarshal, engineering-leadership]
+categories: [workflow]
+heroImage: /og/blog/2026-10-12-a-software-factory-you-dont-have-to-trust.png
+card: /og/blog/2026-10-12-a-software-factory-you-dont-have-to-trust.png
+description: "For the CTO who wants agents building overnight but won't let them run unchecked: how Specmarshal keeps people in charge of what gets built, what counts as done, and what ships."
+---
+
+If you run engineering, you've probably been asked "what's our AI strategy" in more leadership meetings than you can count. You've watched the demos, maybe seen an agent knock out a feature in twenty minutes, and there's a decent chance you've also seen one tell you the tests pass when it never ran them.
+
+What you want is the speed: the "software factory" idea, where work goes in one end and branches come out the other while your team sleeps. What holds you back is that you don't trust it to run on its own, and you're right not to.
+
+I built [Specmarshal](/go/specmarshal) around that distrust. In Specmarshal the agent writes the code and that's the only decision it gets to make, while your tests, a separate reviewer and the people on your team make every other call.
+
+## What actually goes wrong
+
+Agents write pretty good code, sometimes great code, and the trouble is mostly everything around it. When an agent finishes and says it's done, the only one who checked is the agent. The thing doing the work is grading the work, and it's very motivated to give itself an A.
+
+Then there's drift. A model writes its best code early in a session and worse code later, once the context window is full of everything it tried and abandoned. Leave one running all night on a big feature and you come back to something that started smart and ended confused.
+
+There's also blast radius, since an agent with your repo, your shell and your credentials can do a lot of damage while trying very hard to help.
+
+When someone says "I don't trust it to run on its own," it usually breaks down like this:
+
+- I don't trust it to decide what to build.
+- I don't trust it to decide when it's done.
+- I don't trust it near anything it can break.
+- I don't know where my code goes once it's handed to a model.
+- I don't trust it to know when to stop.
+- I need to see what it did without reading ten thousand lines of logs.
+
+Specmarshal has an answer for each one.
+
+## You decide what gets built
+
+Specmarshal works from a **spec**: one feature, written down, with scenarios that describe what working looks like. The spec is broken into small **tickets**. Each one is a vertical slice with its own acceptance criteria and a list of the tickets it waits on.
+
+Tickets are small on purpose, because each one has to fit in the good part of one agent's context window. Every ticket gets a brand new agent process that's started, told one thing and thrown away, with no conversation carried over from one ticket to the next, and that's how you stay out of the dumb zone.
+
+You don't have to write all of that by hand. A planning session grills the idea first, pushing back on it like a reviewer would. Then it drafts the spec and tickets and shows you each one to approve, edit or reject.
+
+A planned spec comes out as `needs-triage`: an agent plans it, a person marks it ready, and nothing runs until somebody on your team says so.
+
+<figure class="shot">
+  <img class="shot-dark" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/spec-ready-dark.webp" alt="A spec page in Specmarshal's web view, marked Not ready, with a Mark ready button above its two tickets" width="1400" height="700" loading="lazy">
+  <img class="shot-light" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/spec-ready-light.webp" alt="" width="1400" height="700" loading="lazy">
+  <figcaption>A freshly planned spec, waiting on a person to mark it ready. The screenshots in this post are Specmarshal's web view with sample data.</figcaption>
+</figure>
+
+On GitHub, ready is a label, and a spec issue is ready while it carries `ready-for-agent`. If anyone edits the body of a spec or ticket after the label went on, it stops being ready:
+
+> the issue's body changed after it was made ready; apply ready-for-agent again to take the new text
+
+That way the text that gets worked is always the text a person approved.
+
+Some work shouldn't go to an agent at all, like production access, a live test against staging or a call with a vendor. Those tickets get `ready-for-human`. A person does the work and closes the ticket with a note on what they did, and Specmarshal hands that note to every ticket that was waiting on it, so the agent starts from what the human actually found.
+
+Before any code gets written, the lead architect runs a **plan review** over the tickets. If the plan has work no ticket owns, or dependencies that loop back on themselves, the run stops before its first ticket and parks the spec for you, which means you find the hole before half a feature gets built around it.
+
+## The agent doesn't get a vote on done
+
+When an agent finishes a ticket, its report might say "complete." Specmarshal treats that as a claim and checks the code anyway.
+
+The check is your **gate**, your own test suite run with one command, `make verify`. Specmarshal runs it itself after the agent is gone, on a fresh checkout of whatever the agent committed.
+
+<figure class="shot">
+  <img class="shot-dark" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/one-ticket-dark.webp" alt="One ticket through the loop: frontier, claim, compose, iteration, ticket branch, then the gate, which leads to a review if green, a repair if red, or parking once the cap is spent" width="1400" height="539" loading="lazy">
+  <img class="shot-light" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/one-ticket-light.webp" alt="" width="1400" height="539" loading="lazy">
+  <figcaption>One ticket, end to end. The gate is the orchestrator's own check, and only the review can resolve the ticket.</figcaption>
+</figure>
+
+The agent doesn't get to rewrite the gate either. The Makefile decides what `make verify` runs, so before anything runs, the Makefile and Specmarshal's own settings get put back to the versions on the feature branch. An agent that changed them gets graded on the old ones anyway, and the run summary says it touched them, so whoever reads that diff knows to look hard at it. That rule came from a real run where an agent rewrote the Makefile partway through a ticket. It turned out to be a legit fix that time, but it still wasn't the call of the thing being graded.
+
+Green tests only prove the repo still works, not that the ticket got done, which is why a green gate sends the ticket to a second agent, the **reviewer**, which reads the ticket and the diff, changes nothing, and says whether each acceptance criterion is met. The review is the only thing in the whole system that can mark a ticket resolved.
+
+Once every ticket is closed, the reviewer reads the spec's scenarios against the whole feature branch, because a pile of finished slices can still miss the feature. If every scenario holds, the run opens a pull request. If any don't, it opens a **draft** pull request that names each unmet scenario and why, and waits for a person.
+
+<figure class="shot">
+  <img class="shot-dark" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/spec-short-dark.webp" alt="A spec page with both tickets resolved but marked Short of 1 requirement, naming the unmet requirement and why" width="1400" height="971" loading="lazy">
+  <img class="shot-light" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/spec-short-light.webp" alt="" width="1400" height="971" loading="lazy">
+  <figcaption>Both tickets resolved, and the spec review still found a requirement unmet. The page says which one and why.</figcaption>
+</figure>
+
+I've had this happen on my own work. Specmarshal builds itself, so its features are specs and tickets like anyone else's. One of mine ran overnight, and even with every ticket closed green and reviewed, it came back unsatisfied with 2 of 32 scenarios unmet. The draft PR said exactly which two, and I'd much rather read that in the morning than find it in production.
+
+## It can't touch what it can break
+
+Specmarshal runs as a service on your Kubernetes cluster, installed with a Helm chart. Every iteration gets a Job of its own, which is one pod running your project's sandbox image that gets thrown away when the iteration ends. The gate runs in a separate pod, and the code goes in and comes back out as a git bundle, never as a mounted volume or a remote the agent can push to.
+
+A run never commits to the branch you started from. Each ticket gets its own branch, those merge into a feature branch for the spec, and the feature branch becomes a pull request against your base branch, at which point the run stops.
+
+<figure class="shot">
+  <img class="shot-dark" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/where-work-ends-up-dark.webp" alt="Branch diagram: the base branch is never moved, a feature branch is cut from it, each ticket gets its own branch that merges back after a green gate and a satisfied review, and the feature branch becomes a pull request" width="1400" height="396" loading="lazy">
+  <img class="shot-light" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/where-work-ends-up-light.webp" alt="" width="1400" height="396" loading="lazy">
+  <figcaption>Where the work ends up. Your base branch only changes when you merge the pull request.</figcaption>
+</figure>
+
+Specmarshal doesn't merge and it doesn't deploy. It hands you reviewed branches and a pull request, and landing it is your call, with your review process, your CODEOWNERS and your CI all still applying.
+
+Your security people will ask about prompt injection. When Specmarshal parks a ticket on GitHub it posts a comment, and someone usually answers there. Those comments show up on Specmarshal's own pages so you can follow the conversation, but they're never handed to an agent. Anyone who can reach the issue can write a comment, and an agent would read it as though it were the ticket. If a person needs to tell the next attempt something, that's what an **operator note** is for, and writing one takes the same operator access as every other change.
+
+## You pick the model, and where your code goes
+
+Specmarshal doesn't host a model, and it doesn't want to. Its job is orchestrating the agents, and which model they run on, along with whose servers your code travels to, is up to you.
+
+The agent Specmarshal drives is Pi, and you point it at a provider: Anthropic, OpenAI, or `local`. Local means any OpenAI-compatible server you run yourself, like vLLM, Ollama or llama.cpp, in your own cloud or on the same cluster. Prompts, and the code in them, go to the endpoint you picked, under your own account and at your provider's price. If it's your own server, the model calls stay with you and there's no per-token bill at all.
+
+Your provider key sits in a Kubernetes Secret on your cluster. The run records (every transcript, every diff, what the gate printed, what it all cost) go into a Postgres database and an S3-compatible bucket that you point it at.
+
+The pods that run agent code are fenced off from the rest of your cluster too. Before a run claims a ticket, Specmarshal puts a NetworkPolicy on those pods that blocks other pods, Services, the nodes and your cloud's metadata endpoint. If your model server lives inside the cluster, you add one policy that lets the agent pods reach it.
+
+Right now the only thing that calls home is the license check: once an hour the service asks our license server whether your key is still good, and the agent pods never make that call. If the check can't get through, nothing changes for 72 hours. After that Specmarshal drops back to the free tier, which still runs the whole loop, just on one project and one ticket at a time.
+
+## It knows when to stop
+
+An unattended agent that's stuck will keep trying forever, and you pay for every try.
+
+Specmarshal counts three kinds of trouble on each ticket, and caps each one separately. A red gate means the code doesn't pass your tests, so the ticket gets a repair attempt aimed at the actual failure, up to three by default. A refused review, where the tests pass but the reviewer won't tick the criteria, is a different problem with its own cap.
+
+The third is a conflicting merge, when two tickets worked in parallel touched the same files. A lead architect phase tries to resolve it. The resolution goes through the gate again and then gets re-read against every earlier ticket whose files it touched, and a merge that broke something already done is refused, however green it is. That one has its own cap too.
+
+When a cap runs out, the ticket is **parked**: set aside with a note saying which kind of trouble got it there, and the run stops spending money on that ticket while it keeps going on the rest.
+
+<figure class="shot">
+  <img class="shot-dark" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/ticket-parked-dark.webp" alt="A spec page with one ticket marked parked, attempts spent" width="1400" height="565" loading="lazy">
+  <img class="shot-light" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/ticket-parked-light.webp" alt="" width="1400" height="565" loading="lazy">
+  <figcaption>A ticket parked after its attempts ran out, with the kind of trouble that parked it.</figcaption>
+</figure>
+
+Then there are limits on the whole run. The iteration budget is 50 phase invocations by default. The dollar ceiling, `spend-ceiling`, is $30 by default and counts what your model provider bills per token, and once a run reaches it nothing new starts. If Specmarshal can't tell what something cost, it treats the ceiling as reached instead of assuming you're under it.
+
+The service polls your projects for specs marked ready. A spec that ends badly (out of budget, deadlocked, unsatisfied, whatever) settles to `parked` and stays there. The next poll doesn't pick it back up, because re-running a spec that couldn't finish would just burn budget on the same failure. A person has to look at it and mark it ready again.
+
+## You can see all of it
+
+The service has a web view where every page leads with what needs a person. The index opens with that, followed by a section per project, down to a page for each spec, run and ticket.
+
+<figure class="shot">
+  <img class="shot-dark" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/needs-a-person-dark.webp" alt="The What needs a person list, with parked tickets, a wedged spec, a spec held by its review and a failed run" width="1400" height="654" loading="lazy">
+  <img class="shot-light" src="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/needs-a-person-light.webp" alt="" width="1400" height="654" loading="lazy">
+  <figcaption>The top of the index. Each line says what's stuck, where, and why.</figcaption>
+</figure>
+
+Spend sits next to the work it bought and the limit it counts against, and a number Specmarshal couldn't read is shown as unknown rather than zero. Anyone with the link can read. Changing anything (releasing a parked ticket, holding a spec, leaving an operator note) takes operator access, and anything you can't undo asks first and tells you what it costs.
+
+Every run also leaves a full record: the event stream, each iteration's transcript word for word, what the gate printed, what everything cost and the commit it started from. When someone asks "why did it do that?" you can go read the answer.
+
+You come in in the morning and one screen tells you what got delivered, what needs you, and what it cost.
+
+## What this changes for your team
+
+Specmarshal is only as good as your gate. It won't judge your code beyond your tests and the acceptance criteria, so if `make verify` is weak, a run will happily deliver code that passes a weak `make verify`. Spend first on your test suite, and on writing acceptance criteria someone could actually check, which, lets be real, your team should be doing anyway.
+
+Your people spend less time typing out the slice and more time on:
+
+- Writing and triaging specs, which means deciding what's worth building and what done means.
+- Marking things ready. That's the sign-off, and a person gives it.
+- Reading branches and pull requests one ticket at a time, since each ticket's branch stays pushed after it merges.
+- Picking up parked tickets, and the `ready-for-human` ones that were never going to an agent.
+
+If you want to kick the tires, start small. Pick one small spec on a repo you'd be happy to throw away. Mark it ready in the evening, read the branches in the morning, and see if you agree with the reviewer.
+
+## Where can I get it?
+
+Not yet. Specmarshal is in private alpha and there's no signup, but you can watch the [product page](/go/specmarshal) or this blog, where I'll keep posting about how it's built.
+
+## TLDR
+
+You don't have to trust the agent.
+
+- People decide what gets built. An agent plans the spec and tickets, a person marks them ready, and editing the text takes the ready mark off.
+- Your tests decide what works. The gate runs after the agent is gone, on a fresh checkout, with the Makefile put back.
+- A separate reviewer decides what's done, ticket by ticket and then the whole spec against its scenarios. If it falls short you get a draft PR.
+- Nothing touches your repo. Each ticket gets a fresh pod on your cluster, and you get a pull request to merge or not.
+- You pick the model: Anthropic, OpenAI or your own server. Keys and run records stay on your cluster.
+- It stops itself, with caps per ticket, a budget and a dollar ceiling per run, and parked work that waits for a person.
+- You can see what needs you, what it spent and a full record of every run.
+
+Well, thats about it for now. Go fix your test suite. You're going to need it.

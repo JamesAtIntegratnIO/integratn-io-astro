@@ -141,3 +141,32 @@ section.band > .label { margin-bottom: 18px; }
   .bar nav a { padding: 6px 6px; }
   .lockup { font-size: 17px; }
 }
+
+/* Code in posts. Inline code sits on the panel with a hairline, because the well is
+   the ground's own colour in light mode and vanishes there. Blocks keep the
+   product's well and border; their highlighting is Shiki's two GitHub themes,
+   switched with the display mode (dark unless light is pinned or the platform asks). */
+.doc :not(pre) > code { background: var(--panel); border: 1px solid var(--border); padding: 0 .3em; font-size: .85em; }
+.doc pre.astro-code { background: var(--panel) !important; }
+.doc .astro-code, .doc .astro-code span { color: var(--shiki-dark); }
+[data-theme="light"] .doc .astro-code, [data-theme="light"] .doc .astro-code span { color: var(--shiki-light); }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .doc .astro-code, :root:not([data-theme]) .doc .astro-code span { color: var(--shiki-light); }
+}
+
+/* A post's tags close the post, as chips, the way most blogs file them. */
+.post-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 32px 0 0; padding-top: 20px; border-top: 1px solid var(--border); }
+.post-tags .chip { text-decoration: none; color: var(--dim); }
+.post-tags .chip:hover { color: var(--text); border-color: var(--dim); }
+
+/* Product screenshots in posts: one image per theme, swapped with the site's theme. */
+figure.shot { margin: 1.75rem 0; }
+figure.shot img { display: block; width: 100%; border: 1px solid var(--border); border-radius: 8px; }
+figure.shot figcaption { margin-top: .5rem; font-size: var(--floor); color: var(--dim); }
+figure.shot .shot-light { display: none; }
+[data-theme="light"] figure.shot .shot-dark { display: none; }
+[data-theme="light"] figure.shot .shot-light { display: block; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) figure.shot .shot-dark { display: none; }
+  :root:not([data-theme]) figure.shot .shot-light { display: block; }
+}

@@ -4,9 +4,23 @@ import Base from "../../layouts/Base.astro";
 const pillars = [
   ["Start with a spec, not a prompt.", "Work is written down first and split into tickets, so what is startable, blocked or waiting is always known."],
   ["Code is verified, not self-declared.", "After each ticket Specmarshal runs your project's own gate and decides for itself. The agent never gets that vote."],
-  ["Reviewed, verified, ready to merge.", "A separate review ticks the acceptance criteria. A run leaves reviewed branches; nothing lands until someone reads them."],
-  ["You stay in control.", "Pause a run, steer it with a note for the next attempt, or release a parked ticket."],
+  ["Reviewed, verified, ready to merge.", "A separate review ticks the acceptance criteria. A run leaves reviewed branches and a pull request; nothing lands until someone merges it."],
+  ["You stay in control.", "Stop an iteration, set a ticket aside, leave a note for the next attempt, or release a parked ticket."],
 ];
+
+const yours = [
+  ["Runs on your cluster.", "Installed with a Helm chart. Every iteration is a pod of its own, the gate runs in another, and code moves in and out as a git bundle, never a mounted volume."],
+  ["Your model, your account.", "Point it at Anthropic, OpenAI, or any OpenAI-compatible server you run, like vLLM or Ollama. Specmarshal orchestrates the agents; it doesn't host a model."],
+  ["Your records stay with you.", "The provider key sits in a Kubernetes Secret. Transcripts, diffs, gate output and costs go to your Postgres and S3-compatible bucket."],
+  ["Fenced off from the rest.", "Agent pods get a NetworkPolicy that blocks other pods, Services, the nodes and your cloud's metadata endpoint. The only call home is an hourly license check from the service."],
+];
+
+const limits = [
+  ["Caps on every ticket.", "A red gate, a refused review and a conflicting merge each have their own cap, three by default. When one runs out the ticket is parked with the reason, and the run carries on with the rest."],
+  ["Limits on every run.", "An iteration budget of 50 and a dollar ceiling of $30 by default. If a cost can't be read, it counts as the ceiling reached."],
+];
+
+const shot = "/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/";
 ---
 
 <Base image="/og/specmarshal.png" title="Specmarshal" nav="products" description="Specmarshal orchestrates autonomous coding agents over your specs, with real gates, real review, and a person in control. Coming soon.">
@@ -29,9 +43,10 @@ const pillars = [
     <!-- The phase strip from Specmarshal's own run page, drawn with the product's stylesheet. -->
     <div class="phase-strip border border-solid border-border rounded-[var(--radius)]">
       <ol class="phase-steps">
-        <li class="phase-step done"><div class="phase-head"><span class="phase-mark">✓</span><span class="phase-name">Plan</span></div><span class="phase-who">planner</span></li>
+        <li class="phase-step done"><div class="phase-head"><span class="phase-mark">✓</span><span class="phase-name">Getting ready</span></div><span class="phase-who">orchestrator</span></li>
+        <li class="phase-step done"><div class="phase-head"><span class="phase-mark">✓</span><span class="phase-name">Plan review</span></div><span class="phase-who">lead architect</span></li>
         <li class="phase-step going" aria-current="step">
-          <div class="phase-head"><span class="phase-mark">▸</span><span class="phase-name">Tickets</span></div>
+          <div class="phase-head"><span class="phase-mark">▸</span><span class="phase-name">Each ticket</span></div>
           <div class="phase-inner">
             <ol class="phase-inner-steps">
               <li class="phase-inner-step done"><span class="phase-mark">✓</span>build</li>
@@ -42,7 +57,7 @@ const pillars = [
           </div>
           <p class="phase-sentence">Each ticket gets a fresh worker in its own sandbox; the project's gate decides whether it is done.</p>
         </li>
-        <li class="phase-step to-come"><div class="phase-head"><span class="phase-mark">○</span><span class="phase-name">Merge-ready</span></div><span class="phase-who">you</span></li>
+        <li class="phase-step to-come"><div class="phase-head"><span class="phase-mark">○</span><span class="phase-name">Spec review</span></div><span class="phase-who">reviewer</span></li>
       </ol>
     </div>
   </section>
@@ -57,8 +72,53 @@ const pillars = [
   </section>
 
   <section class="band">
+    <p class="label">One ticket, end to end</p>
+    <figure class="shot">
+      <img class="shot-dark" src={shot + "one-ticket-dark.webp"} alt="One ticket through the loop: frontier, claim, compose, iteration, ticket branch, then the gate, which leads to a review if green, a repair if red, or parking once the cap is spent" loading="lazy" />
+      <img class="shot-light" src={shot + "one-ticket-light.webp"} alt="" loading="lazy" />
+      <figcaption>The gate is the orchestrator's own check, run after the agent has exited. Only the review can resolve a ticket.</figcaption>
+    </figure>
+  </section>
+
+  <section class="band">
+    <p class="label">Where your code and data go</p>
+    <div class="pillars">
+      {yours.map(([title, line]) => (
+        <div class="pillar"><h3>{title}</h3><p>{line}</p></div>
+      ))}
+    </div>
+  </section>
+
+  <section class="band">
+    <p class="label">Where the work ends up</p>
+    <figure class="shot">
+      <img class="shot-dark" src={shot + "where-work-ends-up-dark.webp"} alt="Branch diagram: the base branch is never moved, each ticket gets its own branch that merges into a feature branch after a green gate and a satisfied review, and the feature branch becomes a pull request" loading="lazy" />
+      <img class="shot-light" src={shot + "where-work-ends-up-light.webp"} alt="" loading="lazy" />
+      <figcaption>A run never commits to the branch you started from. Specmarshal doesn't merge and doesn't deploy; landing the pull request is your call.</figcaption>
+    </figure>
+  </section>
+
+  <section class="band">
+    <p class="label">It knows when to stop</p>
+    <div class="pillars">
+      {limits.map(([title, line]) => (
+        <div class="pillar"><h3>{title}</h3><p>{line}</p></div>
+      ))}
+    </div>
+  </section>
+
+  <section class="band">
+    <p class="label">What needs a person comes first</p>
+    <figure class="shot">
+      <img class="shot-dark" src={shot + "needs-a-person-dark.webp"} alt="The What needs a person list, with parked tickets, a wedged spec, a spec held by its review and a failed run" loading="lazy" />
+      <img class="shot-light" src={shot + "needs-a-person-light.webp"} alt="" loading="lazy" />
+      <figcaption>The top of the web view, shown here with sample data. Each line says what is stuck, where, and why.</figcaption>
+    </figure>
+  </section>
+
+  <section class="band">
     <div class="callout plain">
-      <p style="margin:0"><strong>Specmarshal is in private alpha.</strong> There is nothing to sign up for yet. This page will say when there is, and the blog will cover how it was built.</p>
+      <p style="margin:0"><strong>Specmarshal is in private alpha,</strong> so there's nothing to sign up for yet. For the long version, read <a href="/blog/2026-10-12-a-software-factory-you-dont-have-to-trust/">A Software Factory You Don't Have to Trust</a>.</p>
     </div>
   </section>
 </Base>

@@ -8,7 +8,6 @@ card: /og/blog/2026-05-26-local-ai-cost-control-layer-for-agentic-development.pn
 description: "An agent builds a Go weather service on a locally hosted model, and what that shows about where cloud AI spend goes in iteration-heavy development."
 ---
 
-![Local AI Is Becoming the Cost-Control Layer for Agentic Development](/og/blog/2026-05-26-local-ai-cost-control-layer-for-agentic-development.png)
 
 AI-assisted development is moving from novelty to operating expense.
 

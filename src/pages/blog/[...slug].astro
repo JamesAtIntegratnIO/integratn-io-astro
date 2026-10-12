@@ -1,7 +1,7 @@
 ---
 import { render, type CollectionEntry } from "astro:content";
 import Base from "../../layouts/Base.astro";
-import { day, publishedPosts } from "../../posts";
+import { publishedPosts, titleCase } from "../../posts";
 
 export async function getStaticPaths() {
   const posts = await publishedPosts();
@@ -11,6 +11,10 @@ export async function getStaticPaths() {
 const { post } = Astro.props as { post: CollectionEntry<"posts"> };
 const { Content } = await render(post);
 const { title, description, pubDate, updatedDate, series, tags = [], card } = post.data;
+// The byline reads a date the way a person writes one, and how long the post takes.
+const longDate = (date: Date) =>
+  date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+const minutes = Math.max(1, Math.round((post.body ?? "").split(/\s+/).filter(Boolean).length / 230));
 ---
 
 <Base title={title} description={description} nav="blog" image={card} article={{ published: pubDate, modified: updatedDate, tags }}>
@@ -21,11 +25,16 @@ const { title, description, pubDate, updatedDate, series, tags = [], card } = po
       {description && <p>{description}</p>}
     </div>
     <p class="meta">
-      <span class="mono">{day(pubDate)}</span>
-      {updatedDate && <span> · updated <span class="mono">{day(updatedDate)}</span></span>}
-      {series && <span> · <a href={`/blog/series/${series}/`}>{series}</a></span>}
-      {tags.length > 0 && <span> · {tags.map((tag, i) => <>{i > 0 && ", "}<a href={`/blog/tags/${tag}/`}>{tag}</a></>)}</span>}
+      <time datetime={pubDate.toISOString()}>{longDate(pubDate)}</time>
+      <span> · {minutes} min read</span>
+      {updatedDate && <span> · Updated <time datetime={updatedDate.toISOString()}>{longDate(updatedDate)}</time></span>}
+      {series && <span> · Part of <a href={`/blog/series/${series}/`}>{titleCase(series)}</a></span>}
     </p>
     <article class="doc" data-read-depth><Content /></article>
+    {tags.length > 0 && (
+      <nav class="post-tags" aria-label="Tags">
+        {tags.map((tag) => <a class="chip" href={`/blog/tags/${tag}/`}>#{tag}</a>)}
+      </nav>
+    )}
   </div>
 </Base>

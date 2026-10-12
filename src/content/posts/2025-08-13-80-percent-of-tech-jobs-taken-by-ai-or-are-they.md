@@ -18,7 +18,6 @@ Time to start looking up how to herd alpacas for a living, right?
 Except… no. This kind of headline is built to get clicks, not tell you the full truth.  
 Let’s take a closer look.
 
-![80% of Tech Jobs Are Going to Be Taken by AI — Or Are They?](/og/blog/2025-08-13-80-percent-of-tech-jobs-taken-by-ai-or-are-they.png)
 
 ---
 

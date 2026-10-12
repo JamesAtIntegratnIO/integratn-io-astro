@@ -160,13 +160,13 @@ section.band > .label { margin-bottom: 18px; }
 .post-tags .chip:hover { color: var(--text); border-color: var(--dim); }
 
 /* Product screenshots in posts: one image per theme, swapped with the site's theme. */
-.doc figure.shot { margin: 1.75rem 0; }
-.doc figure.shot img { display: block; width: 100%; border: 1px solid var(--border); border-radius: 8px; }
-.doc figure.shot figcaption { margin-top: .5rem; font-size: var(--floor); color: var(--dim); }
-.doc figure.shot .shot-light { display: none; }
-[data-theme="light"] .doc figure.shot .shot-dark { display: none; }
-[data-theme="light"] .doc figure.shot .shot-light { display: block; }
+figure.shot { margin: 1.75rem 0; }
+figure.shot img { display: block; width: 100%; border: 1px solid var(--border); border-radius: 8px; }
+figure.shot figcaption { margin-top: .5rem; font-size: var(--floor); color: var(--dim); }
+figure.shot .shot-light { display: none; }
+[data-theme="light"] figure.shot .shot-dark { display: none; }
+[data-theme="light"] figure.shot .shot-light { display: block; }
 @media (prefers-color-scheme: light) {
-  :root:not([data-theme]) .doc figure.shot .shot-dark { display: none; }
-  :root:not([data-theme]) .doc figure.shot .shot-light { display: block; }
+  :root:not([data-theme]) figure.shot .shot-dark { display: none; }
+  :root:not([data-theme]) figure.shot .shot-light { display: block; }
 }

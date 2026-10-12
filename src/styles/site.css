@@ -153,3 +153,8 @@ section.band > .label { margin-bottom: 18px; }
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) .doc .astro-code, :root:not([data-theme]) .doc .astro-code span { color: var(--shiki-light); }
 }
+
+/* A post's tags close the post, as chips, the way most blogs file them. */
+.post-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 32px 0 0; padding-top: 20px; border-top: 1px solid var(--border); }
+.post-tags .chip { text-decoration: none; color: var(--dim); }
+.post-tags .chip:hover { color: var(--text); border-color: var(--dim); }

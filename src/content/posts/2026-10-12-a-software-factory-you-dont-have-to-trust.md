@@ -64,9 +64,9 @@ There's one more check before any code gets written. The lead architect runs a *
 
 When an agent finishes a ticket, its report might say "complete." Specmarshal treats that as information about the agent. Not about the code.
 
-What actually decides is your **gate**: your own test suite, `make verify`. And Specmarshal runs it itself, after the agent process has exited. It checks out the delivered commit into a fresh tree the agent never touched. Before it runs anything it swaps the `Makefile` and Specmarshal's own config back in from the feature branch.
+What actually decides is your **gate**. That's your own test suite, run with one command, `make verify`. Specmarshal runs it itself, after the agent is gone, on a fresh checkout of whatever the agent committed.
 
-An agent that can't get the tests to pass has a very easy way out, which is to edit the tests. Specmarshal won't grade an attempt through its own rewrite of the exam.
+And the agent doesn't get to rewrite the gate. The Makefile decides what `make verify` actually runs, so before anything runs, the Makefile and Specmarshal's own settings get put back to the versions on the feature branch. If the agent changed them, it gets graded on the old ones anyway, and the run records that it touched them so the reviewer knows to look hard at that diff. That one came from a real run, where an agent rewrote the Makefile partway through a ticket. It was a legit fix that time. Still not the call of the thing being graded.
 
 Green tests still aren't done though. Green proves the repo still works. It doesn't prove the ticket got done. So a green gate only gets the ticket to a second agent, the **reviewer**, with a different job: read the ticket, read the diff, change nothing, and say whether each acceptance criterion is actually met. The review is the only thing in the whole system that can mark a ticket resolved.
 

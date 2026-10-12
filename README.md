@@ -72,3 +72,5 @@ Page views come from the tool. The site adds three events:
 - `read`: a blog post read to its middle (`50`) and to its end (`100`).
 
 To count a new button, give it a `data-track` name.
+
+Umami's tracked links and pixels are served from this site too, as `/go/<slug>` and `/i/<slug>` (`functions/go/[slug].js` and `functions/i/[slug].js`), so a shared link names integratn.io rather than the stats host. Create them in Umami as usual; the dashboard shows these addresses because Umami's `LINKS_URL` and `PIXELS_URL` point here.
